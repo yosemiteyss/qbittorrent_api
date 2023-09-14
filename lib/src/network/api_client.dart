@@ -1,11 +1,19 @@
 abstract interface class ApiClient {
-  Future<Map<String, dynamic>> get(
+  String get baseUrl;
+
+  Future<dynamic> get(
     String path, {
     Map<String, dynamic>? params,
+    Map<String, String>? headers,
   });
 
-  Future<Map<String, dynamic>> post(
+  Future<dynamic> post(
     String path, {
-    required Object data,
+    Map<String, dynamic>? params,
+    Object? body,
+    Map<String, String>? headers,
+    Map<String, dynamic>? formData,
   });
+
+  Future<void> clearCookies();
 }

@@ -1,60 +1,191 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart';
+import 'package:qbittorrent_api/qbittorrent_api.dart';
 import 'package:qbittorrent_api/src/network/api_client.dart';
-import 'package:qbittorrent_api/src/network/network_exception.dart';
+import 'package:qbittorrent_api/src/network/dio_logging_interceptor.dart';
 
 class DioClient implements ApiClient {
-  DioClient({required this.baseUrl});
+  DioClient({
+    required this.baseUrl,
+    required this.cookiePath,
+    required Duration connectTimeout,
+    required Duration receiveTimeout,
+    required Duration sendTimeout,
+    bool logger = false,
+  }) {
+    _dio = Dio(
+      BaseOptions(
+        connectTimeout: connectTimeout,
+        receiveTimeout: receiveTimeout,
+        sendTimeout: sendTimeout,
+      ),
+    );
 
-  final String baseUrl;
-  final Dio _dio = Dio();
+    if (cookiePath != null) {
+      _persistCookieJar = PersistCookieJar(
+        ignoreExpires: true,
+        storage: FileStorage('$cookiePath/.cookies/'),
+      );
+      _dio.interceptors.add(
+        CookieManager(_persistCookieJar!),
+      );
+    }
+
+    if (logger) {
+      _dio.interceptors.add(
+        DioLoggingInterceptor(level: Level.body),
+      );
+    }
+  }
+
+  late final Dio _dio;
+  PersistCookieJar? _persistCookieJar;
 
   @override
-  Future<Map<String, dynamic>> get(
+  final String baseUrl;
+  final String? cookiePath;
+
+  @override
+  Future<dynamic> get(
     String path, {
     Map<String, dynamic>? params,
+    Map<String, String>? headers,
   }) {
+    params?.removeWhere((key, value) => value == null);
     return _exceptionHandler(() async {
-      final response = await _dio.get(
+      final response = await _dio.get<dynamic>(
         baseUrl + path,
         queryParameters: params,
+        options: Options(
+          headers: headers,
+          contentType: Headers.formUrlEncodedContentType,
+          responseType: ResponseType.plain,
+        ),
       );
-      return json.decode(response.data);
+      return _convertDataFormat(response);
     });
   }
 
   @override
-  Future<Map<String, dynamic>> post(
+  Future<dynamic> post(
     String path, {
-    required Object data,
-  }) {
+    Map<String, dynamic>? params,
+    Object? body,
+    Map<String, String>? headers,
+    Map<String, dynamic>? formData,
+  }) async {
+    final dynamic requestData;
+    if (formData != null) {
+      for (final entry in formData.entries) {
+        final key = entry.key;
+        final value = entry.value;
+        // Convert File to MultipartFile
+        if (value is File) {
+          formData[key] = [await value.toMultipartFile()];
+          continue;
+        }
+        // Convert List<File> to List<MultipartFile>
+        if (value is List<File>) {
+          formData[key] = await Future.wait(
+            value.map((file) => file.toMultipartFile()),
+          );
+          continue;
+        }
+        // Convert FileBytes to MultipartFile
+        if (value is FileBytes) {
+          formData[key] = [value.toMultipartFile()];
+          continue;
+        }
+        // Convert List<FileBytes> to List<MultipartFile>
+        if (value is List<FileBytes>) {
+          formData[key] = value.map((file) => file.toMultipartFile());
+          continue;
+        }
+      }
+      requestData = FormData.fromMap(formData);
+    } else {
+      requestData = body;
+    }
+
+    params?.removeWhere((key, value) => value == null);
+
     return _exceptionHandler(() async {
-      final response = await _dio.post(baseUrl + path, data: data);
-      return json.decode(response.data);
+      final response = await _dio.post<dynamic>(
+        baseUrl + path,
+        queryParameters: params,
+        data: requestData,
+        options: Options(
+          headers: headers,
+          contentType: Headers.formUrlEncodedContentType,
+          responseType: ResponseType.plain,
+        ),
+      );
+      return _convertDataFormat(response);
     });
   }
 
-  Future<Map<String, dynamic>> _exceptionHandler(
-    Future<Map<String, dynamic>> Function() callback,
+  @override
+  Future<void> clearCookies() async {
+    await _persistCookieJar?.deleteAll();
+  }
+
+  dynamic _convertDataFormat(Response<dynamic> response) {
+    final headers = response.headers[Headers.contentTypeHeader];
+    final contentType = headers?.first.split(';').first;
+
+    if (contentType == Headers.jsonContentType) {
+      return jsonDecode(response.data);
+    } else {
+      return response.data as String?;
+    }
+  }
+
+  Future<dynamic> _exceptionHandler(
+    Future<dynamic> Function() callback,
   ) async {
     try {
       return await callback();
     } on DioException catch (e) {
-      throw NetworkException(
-        type: NetworkExceptionType.fromDioExceptionType(e.type),
+      throw QBittorrentException(
+        statusCode: e.response?.statusCode,
+        statusMessage: e.response?.statusMessage,
         message: e.message,
       );
     } on FormatException catch (e) {
-      throw NetworkException(
-        type: NetworkExceptionType.badResponse,
+      throw QBittorrentException(
         message: 'Bad json format: ${e.message}',
       );
     } catch (e) {
-      throw NetworkException(
-        type: NetworkExceptionType.unknown,
+      throw QBittorrentException(
         message: 'Unknown error: ${e.toString()}',
       );
     }
+  }
+}
+
+extension FileExtensions on File {
+  Future<MultipartFile> toMultipartFile() {
+    return MultipartFile.fromFile(
+      path,
+      filename: basename(path),
+      contentType: MediaType('application', 'x-bittorrent'),
+    );
+  }
+}
+
+extension BytesFileExtensions on FileBytes {
+  MultipartFile toMultipartFile() {
+    return MultipartFile.fromBytes(
+      bytes,
+      filename: filename,
+      contentType: MediaType('application', 'x-bittorrent'),
+    );
   }
 }

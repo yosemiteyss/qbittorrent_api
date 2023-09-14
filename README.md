@@ -1,39 +1,69 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# qbittorrent_api
+Dart wrapper for qBittorrent Web API.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+[![pub package](https://img.shields.io/pub/v/qbittorrent_api.svg)](https://pub.dev/packages/qbittorrent_api)
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+## Overview
+This package provides a Dart wrapper for qBittorrent Web API.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+To use this package, you will need a qBittorrent server running with the Web API enabled. 
 
-## Features
+## Web API Version
+Supported Web API version: `qBittorrent v4.1+`
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+## Setup
+Create a `QBittorrentApiV2` instance by providing the URL of your qBittorrent server.
 ```dart
-const like = 'sample';
+final qbittorrent = QBittorrentApiV2(
+  baseUrl: 'http://localhost:8080',   // Replace with the actual URL of your qBittorrent server
+  cookiePath: '.',                    // Path where login cookies is stored
+  logger: true,                       // Enable logging
+);
 ```
 
-## Additional information
+## Basic Usage
+This package provides methods to interact with various API endpoints. Belows are some examples.
+To see all available methods, check out the [official documentation](https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)).
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+### Login
+```dart
+await qbittorent.auth.login(username: 'username', password: 'password');
+```
+
+### Add New Torrent
+```dart
+// Add torrents by urls.
+final torrents = NewTorrents.urls(urls: ['https://example.torrent', 'https://example-2.torrent']);
+await qbittorrent.torrents.addNewTorrents(torrents: torrents);
+
+// Add torrents by files.
+final torrents = NewTorrents.files(files: [File('./example.torrent')]);
+await qbittorrent.torrents.addNewTorrents(torrents: torrents);
+
+// Add torrent by bytes.
+final newTorrents = NewTorrents.bytes(bytes: [FileBytes(filename: 'example.torrent', bytes: bytes)]);
+await qbittorrent.torrents.addNewTorrents(torrents: torrents);
+```
+
+### Subscribe to Torrent List
+```dart
+const interval = Duration(seconds: 3);  // Refresh interval
+final stream = qbittorrent.sync.subscribeMainData(interval: interval).listen((data) {
+  // Handle main data update
+});
+```
+
+### Subscribe to Torrent Properties
+```dart
+const hash = "123123";                  // Torrent hash
+const interval = Duration(seconds: 3);  // Refresh interval
+final stream = qbittorrent.torrents.subscribeProperties(hash: hash, interval: interval).listen((data) {
+  // Handle torrent properties update
+});
+```
+
+## Having Bugs?
+- This package is under active development. If you find any bug, please create an issue on Github.
+
+## Support
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg)](https://buymeacoffee.com/yosemiteyss)

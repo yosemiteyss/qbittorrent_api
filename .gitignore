@@ -7,3 +7,5 @@
 pubspec.lock
 
 .idea
+.cookies
+.fvm
