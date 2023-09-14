@@ -14,7 +14,14 @@ jobs:
   unit_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
-      - run: dart pub get
-      - run: dart test
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Run tests
+        run: dart test
