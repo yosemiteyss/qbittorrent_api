@@ -12,6 +12,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
       - name: Publish
         uses: sakebook/actions-flutter-pub-publisher@v1.4.1
         with:
