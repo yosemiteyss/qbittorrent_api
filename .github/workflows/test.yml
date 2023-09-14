@@ -1,3 +1,5 @@
+name: Run unit tests
+
 on:
   push:
     branches:
@@ -12,9 +14,9 @@ on:
 
 jobs:
   unit_test:
-    runs-on: [ ubuntu-latest ]
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
       - run: dart pub get
       - run: dart test

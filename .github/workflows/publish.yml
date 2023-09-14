@@ -1,0 +1,25 @@
+name: Publish package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Publish
+        uses: sakebook/actions-flutter-pub-publisher@v1.4.1
+        with:
+          credential: ${{ secrets.CREDENTIAL_JSON }}
+          flutter_package: false
+      - name: Create release branch
+        uses: peterjgrainger/action-create-branch@v2.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/${{ github.event.release.tag_name }}
+          sha: '${{ github.event.pull_request.head.sha }}'
