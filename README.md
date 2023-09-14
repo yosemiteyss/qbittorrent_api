@@ -22,8 +22,9 @@ final qbittorrent = QBittorrentApiV2(
 ```
 
 ## Basic Usage
-This package provides methods to interact with various API endpoints. Belows are some examples.
-To see all available methods, check out the [official documentation](https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)).
+This package provides methods to interact with various API endpoints. Belows are some of the examples.
+
+To see all available methods, check out [qBittorrent WebUI API Documentation](https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)).
 
 ### Login
 ```dart
