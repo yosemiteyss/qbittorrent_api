@@ -94,7 +94,7 @@ class DioClient implements ApiClient {
         // Convert List<File> to List<MultipartFile>
         if (value is List<File>) {
           formData[key] = await Future.wait(
-            value.map((file) => file.toMultipartFile()),
+            value.map((file) => file.toMultipartFile()).toList(),
           );
           continue;
         }
@@ -105,7 +105,7 @@ class DioClient implements ApiClient {
         }
         // Convert List<FileBytes> to List<MultipartFile>
         if (value is List<FileBytes>) {
-          formData[key] = value.map((file) => file.toMultipartFile());
+          formData[key] = value.map((file) => file.toMultipartFile()).toList();
           continue;
         }
       }
