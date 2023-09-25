@@ -45,6 +45,9 @@ enum TorrentState {
   @JsonValue('metaDL')
   metaDL,
 
+  @JsonValue('forcedMetaDL')
+  forcedMetaDL,
+
   /// Torrent is paused and has NOT finished downloading
   @JsonValue('pausedDL')
   pausedDL,
