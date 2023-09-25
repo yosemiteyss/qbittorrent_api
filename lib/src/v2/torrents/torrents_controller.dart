@@ -23,6 +23,7 @@ class TorrentsController {
   final ApiClient _apiClient;
 
   /// Get torrent list
+  /// [options] - The options to filter the torrents.
   Future<List<TorrentInfo>> getTorrentsList({
     required TorrentListOptions options,
   }) async {
@@ -31,6 +32,17 @@ class TorrentsController {
       params: options.toJson(),
     );
     return data.map((e) => TorrentInfo.fromJson(e)).toList();
+  }
+
+  /// Subscribe to torrent list changes by polling.
+  /// [options] - The options to filter the torrents.
+  /// [interval] - The polling interval.
+  Stream<List<TorrentInfo>> subscribeTorrentsList({
+    required TorrentListOptions options,
+    Duration interval = const Duration(seconds: 5),
+  }) {
+    return Stream.periodic(interval, (_) => getTorrentsList(options: options))
+        .asyncExpand(Stream.fromFuture);
   }
 
   /// Get torrent generic properties
