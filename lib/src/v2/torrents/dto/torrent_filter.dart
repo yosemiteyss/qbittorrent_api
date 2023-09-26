@@ -10,6 +10,8 @@ enum TorrentFilter {
   stalled('stalled'),
   stalledUploading('stalled_uploading'),
   stalledDownloading('stalled_downloading'),
+  checking('checking'),
+  moving('moving'),
   errored('errored');
 
   const TorrentFilter(this.value);

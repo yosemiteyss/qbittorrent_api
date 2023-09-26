@@ -45,6 +45,9 @@ enum TorrentState {
   @JsonValue('metaDL')
   metaDL,
 
+  @JsonValue('forcedMetaDL')
+  forcedMetaDL,
+
   /// Torrent is paused and has NOT finished downloading
   @JsonValue('pausedDL')
   pausedDL,
@@ -62,8 +65,8 @@ enum TorrentState {
   checkingDL,
 
   /// Torrent is forced to downloading to ignore queue limit
-  @JsonValue('forceDL')
-  forceDL,
+  @JsonValue('forcedDL')
+  forcedDL,
 
   /// Checking resume data on qBt startup
   @JsonValue('checkingResumeData')

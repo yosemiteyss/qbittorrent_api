@@ -54,6 +54,8 @@ const _$TorrentFilterEnumMap = {
   TorrentFilter.stalled: 'stalled',
   TorrentFilter.stalledUploading: 'stalledUploading',
   TorrentFilter.stalledDownloading: 'stalledDownloading',
+  TorrentFilter.checking: 'checking',
+  TorrentFilter.moving: 'moving',
   TorrentFilter.errored: 'errored',
 };
 
