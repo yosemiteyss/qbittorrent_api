@@ -1,3 +1,6 @@
+## 1.0.4
+- Fix torrent availability data type
+
 ## 1.0.3
 - Add forcedMetaDL torrent state
 - Add checking and moving torrent filter
