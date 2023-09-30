@@ -75,7 +75,7 @@ class TorrentInfo {
 
   /// Percentage of file pieces currently available
   @JsonKey(name: 'availability')
-  final int? availability;
+  final double? availability;
 
   /// Category of the torrent
   @JsonKey(name: 'category')

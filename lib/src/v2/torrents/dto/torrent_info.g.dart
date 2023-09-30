@@ -10,7 +10,7 @@ TorrentInfo _$TorrentInfoFromJson(Map<String, dynamic> json) => TorrentInfo(
       addedOn: json['added_on'] as int?,
       amountLeft: json['amount_left'] as int?,
       autoTmm: json['auto_tmm'] as bool?,
-      availability: json['availability'] as int?,
+      availability: (json['availability'] as num?)?.toDouble(),
       category: json['category'] as String?,
       completed: json['completed'] as int?,
       completionOn: json['completion_on'] as int?,
