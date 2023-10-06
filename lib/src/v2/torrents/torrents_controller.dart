@@ -40,8 +40,9 @@ class TorrentsController {
   Stream<List<TorrentInfo>> subscribeTorrentsList({
     required TorrentListOptions options,
     Duration interval = const Duration(seconds: 5),
-  }) {
-    return Stream.periodic(interval, (_) => getTorrentsList(options: options))
+  }) async* {
+    yield await getTorrentsList(options: options);
+    yield* Stream.periodic(interval, (_) => getTorrentsList(options: options))
         .asyncExpand(Stream.fromFuture);
   }
 
@@ -61,8 +62,9 @@ class TorrentsController {
   Stream<TorrentProperties> subscribeProperties({
     required String hash,
     Duration interval = const Duration(seconds: 5),
-  }) {
-    return Stream.periodic(interval, (_) => getProperties(hash: hash))
+  }) async* {
+    yield await getProperties(hash: hash);
+    yield* Stream.periodic(interval, (_) => getProperties(hash: hash))
         .asyncExpand(Stream.fromFuture);
   }
 
@@ -125,8 +127,9 @@ class TorrentsController {
   Stream<List<PieceState>> subscribePieceStates({
     required String hash,
     Duration interval = const Duration(seconds: 5),
-  }) {
-    return Stream.periodic(interval, (_) => getPieceStates(hash: hash))
+  }) async* {
+    yield await getPieceStates(hash: hash);
+    yield* Stream.periodic(interval, (_) => getPieceStates(hash: hash))
         .asyncExpand(Stream.fromFuture);
   }
 
