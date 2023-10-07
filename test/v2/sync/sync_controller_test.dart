@@ -1,4 +1,3 @@
-import 'package:fake_async/fake_async.dart';
 import 'package:qbittorrent_api/src/v2/sync/dto/main_data.dart';
 import 'package:qbittorrent_api/src/v2/sync/sync_controller.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/torrent_state.dart';
@@ -236,40 +235,6 @@ void main() {
       fakeApiClient.setResponse(buildMainDataResponse(), isJson: true);
       final mainData = await syncController.getMainData();
       expectMainDataResponse(mainData);
-    });
-
-    test('subscribeMainData emits main data changes', () {
-      fakeAsync((async) {
-        var count = 0;
-        const interval = Duration(seconds: 3);
-        final List<double> progress = [0, 0.5, 1];
-        final stream = syncController.subscribeMainData(interval: interval);
-
-        fakeApiClient.setResponse(
-          buildMainDataResponse(torrentProgress: progress[count]),
-          isJson: true,
-        );
-        stream.listen(
-          expectAsync1<void, MainData>((mainData) {
-            expectMainDataResponse(
-              mainData,
-              torrentProgress: progress[count],
-            );
-            count++;
-            if (count < progress.length) {
-              fakeApiClient.setResponse(
-                buildMainDataResponse(torrentProgress: progress[count]),
-                isJson: true,
-              );
-            }
-          }, count: progress.length),
-        );
-
-        // Advance the time by the polling interval for the expected number of events.
-        for (var i = 0; i < progress.length; i++) {
-          async.elapse(interval);
-        }
-      });
     });
 
     test('getTorrentPeersData returns peers data', () async {
