@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
+import 'dart:typed_data';
+
 import 'package:qbittorrent_api/src/network/api_client.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/add_peers_result.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/category.dart';
@@ -661,6 +663,17 @@ class TorrentsController {
         'oldPath': oldPath,
         'newPath': newPath,
       },
+    );
+  }
+
+  /// Export torrent file
+  /// [hash] - The hash of the torrent
+  /// Return the torrent file as bytes.
+  Future<Uint8List> exportTorrent({required String hash}) async {
+    return await _apiClient.post(
+      '/torrents/export',
+      body: {'hash': hash},
+      returnBytes: true,
     );
   }
 }

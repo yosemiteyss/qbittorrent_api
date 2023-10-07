@@ -5,6 +5,7 @@ abstract interface class ApiClient {
     String path, {
     Map<String, dynamic>? params,
     Map<String, String>? headers,
+    bool returnBytes,
   });
 
   Future<dynamic> post(
@@ -13,6 +14,7 @@ abstract interface class ApiClient {
     Object? body,
     Map<String, String>? headers,
     Map<String, dynamic>? formData,
+    bool returnBytes,
   });
 
   Future<void> clearCookies();

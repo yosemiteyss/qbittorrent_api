@@ -20,6 +20,7 @@ class FakeApiClient implements ApiClient {
     String path, {
     Map<String, dynamic>? params,
     Map<String, String>? headers,
+    bool returnBytes = false,
   }) async {
     _path = path;
     _params = params;
@@ -34,6 +35,7 @@ class FakeApiClient implements ApiClient {
     Object? body,
     Map<String, String>? headers,
     Map<String, dynamic>? formData,
+    bool returnBytes = false,
   }) async {
     _path = path;
     _params = params;
@@ -46,7 +48,7 @@ class FakeApiClient implements ApiClient {
   @override
   Future<void> clearCookies() async {}
 
-  void setResponse(String response, {bool isJson = false}) {
+  void setResponse(dynamic response, {bool isJson = false}) {
     if (isJson) {
       _response = jsonDecode(response);
     } else {

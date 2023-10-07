@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -57,6 +58,7 @@ class DioClient implements ApiClient {
     String path, {
     Map<String, dynamic>? params,
     Map<String, String>? headers,
+    bool returnBytes = false,
   }) {
     params?.removeWhere((key, value) => value == null);
     return _exceptionHandler(() async {
@@ -66,7 +68,7 @@ class DioClient implements ApiClient {
         options: Options(
           headers: headers,
           contentType: Headers.formUrlEncodedContentType,
-          responseType: ResponseType.plain,
+          responseType: returnBytes ? ResponseType.bytes : ResponseType.plain,
         ),
       );
       return _convertDataFormat(response);
@@ -80,6 +82,7 @@ class DioClient implements ApiClient {
     Object? body,
     Map<String, String>? headers,
     Map<String, dynamic>? formData,
+    bool returnBytes = false,
   }) async {
     final dynamic requestData;
     if (formData != null) {
@@ -124,7 +127,7 @@ class DioClient implements ApiClient {
         options: Options(
           headers: headers,
           contentType: Headers.formUrlEncodedContentType,
-          responseType: ResponseType.plain,
+          responseType: returnBytes ? ResponseType.bytes : ResponseType.plain,
         ),
       );
       return _convertDataFormat(response);
@@ -142,9 +145,13 @@ class DioClient implements ApiClient {
 
     if (contentType == Headers.jsonContentType) {
       return jsonDecode(response.data);
-    } else {
-      return response.data as String?;
     }
+
+    if (response.data is List<int>) {
+      return response.data as Uint8List;
+    }
+
+    return response.data as String?;
   }
 
   Future<dynamic> _exceptionHandler(
