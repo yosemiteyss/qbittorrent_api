@@ -72,14 +72,25 @@ class TorrentsController {
 
   /// Get torrent trackers
   /// [hash] - The hash of the torrent you want to get the trackers of
-  Future<List<Tracker>> getTrackers({
-    required String hash,
-  }) async {
+  Future<List<Tracker>> getTrackers({required String hash}) async {
     final List<dynamic> data = await _apiClient.get(
       '/torrents/trackers',
       params: {'hash': hash},
     );
     return data.map((e) => Tracker.fromJson(e)).toList();
+  }
+
+  /// Subscribe to trackers changes by polling.
+  /// [hash] - The hash of the torrent.
+  /// [interval] - The polling interval.
+  Stream<List<Tracker>> subscribeTrackers({
+    required String hash,
+    Duration interval = const Duration(seconds: 5),
+  }) async* {
+    yield await getTrackers(hash: hash);
+    yield* Stream.periodic(
+            const Duration(seconds: 5), (_) => getTrackers(hash: hash))
+        .asyncExpand(Stream.fromFuture);
   }
 
   /// Get torrent web seeds
