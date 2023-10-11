@@ -40,7 +40,9 @@ Map<String, dynamic> _$TrackerToJson(Tracker instance) {
 const _$TrackerStatusEnumMap = {
   TrackerStatus.disabled: 0,
   TrackerStatus.notContacted: 1,
-  TrackerStatus.contactedWorking: 2,
+  TrackerStatus.working: 2,
   TrackerStatus.updating: 3,
-  TrackerStatus.contactedNotWorking: 4,
+  TrackerStatus.notWorking: 4,
+  TrackerStatus.trackerError: 5,
+  TrackerStatus.unreachable: 6,
 };
