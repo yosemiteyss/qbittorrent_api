@@ -1050,5 +1050,13 @@ void main() {
       expect(body?['oldPath'], 'oldPath');
       expect(body?['newPath'], 'newPath');
     });
+
+    test('exportTorrent returns bytes', () async {
+      fakeApiClient.setResponse(Uint8List.fromList([1, 2, 3]));
+      final bytes = await torrentsController.exportTorrent(hash: 'hash');
+      final body = fakeApiClient.getBody() as Map<String, dynamic>?;
+      expect(body?['hash'], 'hash');
+      expect(bytes, Uint8List.fromList([1, 2, 3]));
+    });
   });
 }

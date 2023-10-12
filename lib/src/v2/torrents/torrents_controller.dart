@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
+import 'dart:typed_data';
+
 import 'package:qbittorrent_api/src/network/api_client.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/add_peers_result.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/category.dart';
@@ -40,8 +42,9 @@ class TorrentsController {
   Stream<List<TorrentInfo>> subscribeTorrentsList({
     required TorrentListOptions options,
     Duration interval = const Duration(seconds: 5),
-  }) {
-    return Stream.periodic(interval, (_) => getTorrentsList(options: options))
+  }) async* {
+    yield await getTorrentsList(options: options);
+    yield* Stream.periodic(interval, (_) => getTorrentsList(options: options))
         .asyncExpand(Stream.fromFuture);
   }
 
@@ -61,21 +64,33 @@ class TorrentsController {
   Stream<TorrentProperties> subscribeProperties({
     required String hash,
     Duration interval = const Duration(seconds: 5),
-  }) {
-    return Stream.periodic(interval, (_) => getProperties(hash: hash))
+  }) async* {
+    yield await getProperties(hash: hash);
+    yield* Stream.periodic(interval, (_) => getProperties(hash: hash))
         .asyncExpand(Stream.fromFuture);
   }
 
   /// Get torrent trackers
   /// [hash] - The hash of the torrent you want to get the trackers of
-  Future<List<Tracker>> getTrackers({
-    required String hash,
-  }) async {
+  Future<List<Tracker>> getTrackers({required String hash}) async {
     final List<dynamic> data = await _apiClient.get(
       '/torrents/trackers',
       params: {'hash': hash},
     );
     return data.map((e) => Tracker.fromJson(e)).toList();
+  }
+
+  /// Subscribe to trackers changes by polling.
+  /// [hash] - The hash of the torrent.
+  /// [interval] - The polling interval.
+  Stream<List<Tracker>> subscribeTrackers({
+    required String hash,
+    Duration interval = const Duration(seconds: 5),
+  }) async* {
+    yield await getTrackers(hash: hash);
+    yield* Stream.periodic(
+            const Duration(seconds: 5), (_) => getTrackers(hash: hash))
+        .asyncExpand(Stream.fromFuture);
   }
 
   /// Get torrent web seeds
@@ -125,8 +140,9 @@ class TorrentsController {
   Stream<List<PieceState>> subscribePieceStates({
     required String hash,
     Duration interval = const Duration(seconds: 5),
-  }) {
-    return Stream.periodic(interval, (_) => getPieceStates(hash: hash))
+  }) async* {
+    yield await getPieceStates(hash: hash);
+    yield* Stream.periodic(interval, (_) => getPieceStates(hash: hash))
         .asyncExpand(Stream.fromFuture);
   }
 
@@ -658,6 +674,17 @@ class TorrentsController {
         'oldPath': oldPath,
         'newPath': newPath,
       },
+    );
+  }
+
+  /// Export torrent file
+  /// [hash] - The hash of the torrent
+  /// Return the torrent file as bytes.
+  Future<Uint8List> exportTorrent({required String hash}) async {
+    return await _apiClient.post(
+      '/torrents/export',
+      body: {'hash': hash},
+      returnBytes: true,
     );
   }
 }

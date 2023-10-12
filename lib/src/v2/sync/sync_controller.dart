@@ -26,8 +26,9 @@ class SyncController {
   Stream<MainData> subscribeMainData({
     RIDGenerator? rid,
     Duration interval = const Duration(seconds: 1),
-  }) {
-    return Stream.periodic(interval, (_) => getMainData(rid: rid?.call()))
+  }) async* {
+    yield await getMainData(rid: rid?.call());
+    yield* Stream.periodic(interval, (_) => getMainData(rid: rid?.call()))
         .asyncExpand(Stream.fromFuture);
   }
 

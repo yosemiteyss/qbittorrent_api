@@ -11,7 +11,7 @@ enum TrackerStatus {
 
   /// Tracker has been contacted and is working
   @JsonValue(2)
-  contactedWorking,
+  working,
 
   /// Tracker is updating
   @JsonValue(3)
@@ -19,5 +19,13 @@ enum TrackerStatus {
 
   /// Tracker has been contacted, but it is not working (or doesn't send proper replies)
   @JsonValue(4)
-  contactedNotWorking,
+  notWorking,
+
+  /// Tracker error
+  @JsonValue(5)
+  trackerError,
+
+  /// Tracker is unreachable
+  @JsonValue(6)
+  unreachable,
 }
