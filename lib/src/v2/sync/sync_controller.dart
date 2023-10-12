@@ -41,7 +41,7 @@ class SyncController {
     int? rid,
   }) async {
     final Map<String, dynamic> data = await _apiClient.get(
-      '/sync/torrentPeersData',
+      '/sync/torrentPeers',
       params: {'hash': hash, 'rid': rid},
     );
     return PeersData.fromJson(data);
