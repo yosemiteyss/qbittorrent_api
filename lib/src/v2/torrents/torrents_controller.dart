@@ -230,7 +230,7 @@ class TorrentsController {
       '/torrents/addTrackers',
       body: {
         'hash': hash,
-        'urls': urls.join('%0A'),
+        'urls': const ListItemConverter.newline().toJson(urls),
       },
     );
   }

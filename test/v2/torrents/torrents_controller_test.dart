@@ -502,7 +502,7 @@ void main() {
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['urls'],
-        'http://192.168.0.1/announce%0Audp://192.168.0.1:3333/dummyAnnounce',
+        'http://192.168.0.1/announce\nudp://192.168.0.1:3333/dummyAnnounce',
       );
     });
 
