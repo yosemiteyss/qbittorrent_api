@@ -1,3 +1,9 @@
+## 1.0.5
+- Add `TorrentsController.subscribeTrackers`
+- Add `TorrentsController.exportTorrent`
+- Fix stream methods not emitting values on start
+- Update `TrackerStatus`
+
 ## 1.0.4
 - Fix torrent availability data type
 
