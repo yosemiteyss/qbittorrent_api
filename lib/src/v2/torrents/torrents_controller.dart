@@ -133,6 +133,17 @@ class TorrentsController {
     return data.map((e) => TorrentContents.fromJson(e)).toList();
   }
 
+  /// Subscribe to torrent contents changes by polling.
+  Stream<List<TorrentContents>> subscribeContents({
+    required String hash,
+    Duration interval = const Duration(seconds: 5),
+  }) async* {
+    yield await getContents(hash: hash);
+    yield* Stream.periodic(
+            const Duration(seconds: 5), (_) => getContents(hash: hash))
+        .asyncExpand(Stream.fromFuture);
+  }
+
   /// Get torrent pieces' states
   /// [hash] - The hash of the torrent you want to get the pieces' states of
   Future<List<PieceState>> getPieceStates({
