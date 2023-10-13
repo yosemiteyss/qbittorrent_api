@@ -105,6 +105,17 @@ class TorrentsController {
     return data.map((e) => WebSeed.fromJson(e)).toList();
   }
 
+  /// Subscribe to web seeds changes by polling.
+  Stream<List<WebSeed>> subscribeWebSeeds({
+    required String hash,
+    Duration interval = const Duration(seconds: 5),
+  }) async* {
+    yield await getWebSeeds(hash: hash);
+    yield* Stream.periodic(
+            const Duration(seconds: 5), (_) => getWebSeeds(hash: hash))
+        .asyncExpand(Stream.fromFuture);
+  }
+
   /// Get torrent contents
   /// [hash] - The hash of the torrent you want to get the contents of
   /// [indexes] - The indexes of the files you want to retrieve. indexes can contain multiple values separated by |.
