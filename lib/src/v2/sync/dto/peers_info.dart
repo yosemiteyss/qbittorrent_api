@@ -63,7 +63,7 @@ class PeersInfo {
   final int? port;
 
   @JsonKey(name: 'progress')
-  final int? progress;
+  final double? progress;
 
   @JsonKey(name: 'relevance')
   final int? relevance;

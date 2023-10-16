@@ -1,3 +1,11 @@
+## 1.0.6
+- Add `SyncController.subscribeTorrentPeersData`
+- Add `TorrentsController.subscribeWebSeeds`
+- Add `TorrentsController.subscribeContents`
+- Fix `PeersInfo.progress` data type
+- Fix get peers data endpoint
+- Fix add trackers request
+
 ## 1.0.5
 - Add `TorrentsController.subscribeTrackers`
 - Add `TorrentsController.exportTorrent`

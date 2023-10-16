@@ -1,6 +1,6 @@
 name: qbittorrent_api
 description: This package provides methods for making requests to qBittorrent Web API using Dart.
-version: 1.0.5
+version: 1.0.6
 repository: https://github.com/yosemiteyss/qbittorrent_api
 
 environment:

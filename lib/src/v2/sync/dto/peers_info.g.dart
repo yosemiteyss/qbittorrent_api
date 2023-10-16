@@ -19,7 +19,7 @@ PeersInfo _$PeersInfoFromJson(Map<String, dynamic> json) => PeersInfo(
       ip: json['ip'] as String?,
       peerIdClient: json['peer_id_client'] as String?,
       port: json['port'] as int?,
-      progress: json['progress'] as int?,
+      progress: (json['progress'] as num?)?.toDouble(),
       relevance: json['relevance'] as int?,
       upSpeed: json['up_speed'] as int?,
       uploaded: json['uploaded'] as int?,

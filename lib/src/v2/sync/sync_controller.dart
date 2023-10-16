@@ -41,9 +41,25 @@ class SyncController {
     int? rid,
   }) async {
     final Map<String, dynamic> data = await _apiClient.get(
-      '/sync/torrentPeersData',
+      '/sync/torrentPeers',
       params: {'hash': hash, 'rid': rid},
     );
     return PeersData.fromJson(data);
+  }
+
+  /// Subscribe to torrent peers data changes by polling.
+  /// [hash] - Torrent hash
+  /// [rid] - Response ID. If not provided, rid=0 will be assumed.
+  /// [interval] - The polling interval.
+  Stream<PeersData> subscribeTorrentPeersData({
+    required String hash,
+    RIDGenerator? rid,
+    Duration interval = const Duration(seconds: 1),
+  }) async* {
+    yield await getTorrentPeersData(hash: hash, rid: rid?.call());
+    yield* Stream.periodic(
+      interval,
+      (_) => getTorrentPeersData(hash: hash, rid: rid?.call()),
+    ).asyncExpand(Stream.fromFuture);
   }
 }
