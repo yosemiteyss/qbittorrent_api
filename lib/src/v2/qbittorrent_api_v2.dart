@@ -9,7 +9,7 @@ import 'package:qbittorrent_api/src/v2/transfer/transfer_controller.dart';
 
 class QBittorrentApiV2 {
   /// Class for qBittorrent API v2.
-  /// [baseUrl - The base url of the qBittorrent server.
+  /// [baseUrl] - The base url of the qBittorrent server.
   /// [cookiePath] - The path to the cookie file. Set null for Flutter Web application.
   /// [connectTimeout] - Timeout for [ApiClient] to connect to the server.
   /// [receiveTimeout] - Timeout for [ApiClient] to receive data.

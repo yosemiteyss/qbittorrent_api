@@ -257,6 +257,35 @@ void main() {
       expect(trackers[0].url, 'udp://tracker.openbittorrent.com:80/announce');
     });
 
+    test('getTrackers should convert tier empty string to null', () async {
+      fakeApiClient.setResponse('''
+      [
+        {
+            "msg": "",
+            "num_downloaded": -1,
+            "num_leeches": -1,
+            "num_peers": -1,
+            "num_seeds": -1,
+            "status": 1,
+            "tier": "",
+            "url": "udp://tracker.openbittorrent.com:80/announce"
+        }
+      ]
+      ''', isJson: true);
+      final trackers = await torrentsController.getTrackers(
+        hash: 'd984f67af9917b214cd8b6048ab5624c7df6a07a',
+      );
+      expect(trackers.length, 1);
+      expect(trackers[0].msg, '');
+      expect(trackers[0].numDownloaded, -1);
+      expect(trackers[0].numLeeches, -1);
+      expect(trackers[0].numPeers, -1);
+      expect(trackers[0].numSeeds, -1);
+      expect(trackers[0].status, TrackerStatus.notContacted);
+      expect(trackers[0].tier, null);
+      expect(trackers[0].url, 'udp://tracker.openbittorrent.com:80/announce');
+    });
+
     test('getWebSeeds returns a list of web seeds', () async {
       fakeApiClient.setResponse('''
       [

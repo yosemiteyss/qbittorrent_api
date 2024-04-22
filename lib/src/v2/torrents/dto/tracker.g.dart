@@ -9,7 +9,7 @@ part of 'tracker.dart';
 Tracker _$TrackerFromJson(Map<String, dynamic> json) => Tracker(
       url: json['url'] as String?,
       status: $enumDecodeNullable(_$TrackerStatusEnumMap, json['status']),
-      tier: json['tier'] as int?,
+      tier: const EmptyStringToInt().fromJson(json['tier']),
       numPeers: json['num_peers'] as int?,
       numSeeds: json['num_seeds'] as int?,
       numLeeches: json['num_leeches'] as int?,
@@ -28,7 +28,7 @@ Map<String, dynamic> _$TrackerToJson(Tracker instance) {
 
   writeNotNull('url', instance.url);
   writeNotNull('status', _$TrackerStatusEnumMap[instance.status]);
-  writeNotNull('tier', instance.tier);
+  writeNotNull('tier', const EmptyStringToInt().toJson(instance.tier));
   writeNotNull('num_peers', instance.numPeers);
   writeNotNull('num_seeds', instance.numSeeds);
   writeNotNull('num_leeches', instance.numLeeches);

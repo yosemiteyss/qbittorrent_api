@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/tracker_status.dart';
+import 'package:qbittorrent_api/src/v2/utils/empty_string_converter.dart';
 
 part 'tracker.g.dart';
 
@@ -32,6 +33,7 @@ class Tracker {
   /// Tier numbers are valid when >= 0, < 0 is used as placeholder when tier
   /// does not exist for special entries (such as DHT).
   @JsonKey(name: 'tier')
+  @EmptyStringToInt()
   final int? tier;
 
   /// Number of peers for current torrent, as reported by the tracker
