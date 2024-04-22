@@ -1,3 +1,6 @@
+## 1.0.7
+- Fix convert tracker tier empty string to nul
+
 ## 1.0.6
 - Add `SyncController.subscribeTorrentPeersData`
 - Add `TorrentsController.subscribeWebSeeds`
