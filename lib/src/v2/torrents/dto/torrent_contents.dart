@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qbittorrent_api/src/v2/torrents/dto/file_priority.dart';
 
 part 'torrent_contents.g.dart';
 
@@ -37,7 +36,7 @@ class TorrentContents {
 
   /// File priority
   @JsonKey(name: 'priority')
-  final FilePriority? priority;
+  final int? priority;
 
   /// True if file is seeding/complete
   @JsonKey(name: 'is_seed')
