@@ -1,3 +1,6 @@
+## 1.1.0
+- Fix use int for file priority
+
 ## 1.0.7
 - Fix convert tracker tier empty string to nul
 

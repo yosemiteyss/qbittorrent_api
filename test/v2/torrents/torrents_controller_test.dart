@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:qbittorrent_api/src/v2/torrents/dto/file_priority.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/new_torrents.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/piece_state.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/ratio_limit.dart';
@@ -335,7 +334,7 @@ void main() {
         'test_folder/images/LOC_Main_Reading_Room_Highsmith.jpg',
       );
       expect(contents[0].pieceRange, [0, 537]);
-      expect(contents[0].priority, FilePriority.normal);
+      expect(contents[0].priority, 1);
       expect(contents[0].progress, 1);
       expect(contents[0].size, 17614527);
     });
@@ -675,7 +674,7 @@ void main() {
       await torrentsController.setFilePriority(
         hash: 'd984f67af9917b214cd8b6048ab5624c7df6a07a',
         fileIds: ['0', '1'],
-        priority: FilePriority.ignored,
+        priority: 1,
       );
     });
 
@@ -684,7 +683,7 @@ void main() {
       await torrentsController.setFilePriority(
         hash: 'd984f67af9917b214cd8b6048ab5624c7df6a07a',
         fileIds: ['0', '1'],
-        priority: FilePriority.ignored,
+        priority: 1,
       );
       final body = fakeApiClient.getBody() as Map<String, dynamic>?;
       expect(body?['id'], '0|1');

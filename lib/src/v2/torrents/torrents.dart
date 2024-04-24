@@ -1,6 +1,5 @@
 export './dto/add_peers_result.dart';
 export './dto/category.dart';
-export './dto/file_priority.dart';
 export './dto/new_torrents.dart';
 export './dto/piece_state.dart';
 export './dto/ratio_limit.dart';

@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:qbittorrent_api/src/network/api_client.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/add_peers_result.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/category.dart';
-import 'package:qbittorrent_api/src/v2/torrents/dto/file_priority.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/new_torrents.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/piece_state.dart';
 import 'package:qbittorrent_api/src/v2/torrents/dto/ratio_limit.dart';
@@ -358,14 +357,14 @@ class TorrentsController {
   Future<void> setFilePriority({
     required String hash,
     required List<String> fileIds,
-    required FilePriority priority,
+    required int priority,
   }) async {
     await _apiClient.post(
       '/torrents/filePrio',
       body: {
         'hash': hash,
         'id': const ListItemConverter.bar().toJson(fileIds),
-        'priority': priority.value,
+        'priority': priority,
       },
     );
   }

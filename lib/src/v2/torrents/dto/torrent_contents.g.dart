@@ -12,7 +12,7 @@ TorrentContents _$TorrentContentsFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       size: json['size'] as int?,
       progress: (json['progress'] as num?)?.toDouble(),
-      priority: $enumDecodeNullable(_$FilePriorityEnumMap, json['priority']),
+      priority: json['priority'] as int?,
       isSeed: json['is_seed'] as bool?,
       pieceRange: (json['piece_range'] as List<dynamic>?)
           ?.map((e) => e as int)
@@ -33,17 +33,9 @@ Map<String, dynamic> _$TorrentContentsToJson(TorrentContents instance) {
   writeNotNull('name', instance.name);
   writeNotNull('size', instance.size);
   writeNotNull('progress', instance.progress);
-  writeNotNull('priority', _$FilePriorityEnumMap[instance.priority]);
+  writeNotNull('priority', instance.priority);
   writeNotNull('is_seed', instance.isSeed);
   writeNotNull('piece_range', instance.pieceRange);
   writeNotNull('availability', instance.availability);
   return val;
 }
-
-const _$FilePriorityEnumMap = {
-  FilePriority.ignored: 0,
-  FilePriority.normal: 1,
-  FilePriority.high: 6,
-  FilePriority.maximum: 7,
-  FilePriority.mixed: -1,
-};
