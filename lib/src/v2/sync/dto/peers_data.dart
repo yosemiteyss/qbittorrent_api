@@ -8,6 +8,7 @@ class PeersData {
   const PeersData({
     this.fullUpdate,
     this.peers,
+    this.peersRemoved,
     this.rid,
     this.showFlags,
   });
@@ -20,6 +21,9 @@ class PeersData {
 
   @JsonKey(name: 'peers')
   final Map<String, PeersInfo>? peers;
+
+  @JsonKey(name: 'peers_removed')
+  final List<String>? peersRemoved;
 
   @JsonKey(name: 'rid')
   final int? rid;

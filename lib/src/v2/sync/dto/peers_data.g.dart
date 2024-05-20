@@ -11,6 +11,9 @@ PeersData _$PeersDataFromJson(Map<String, dynamic> json) => PeersData(
       peers: (json['peers'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, PeersInfo.fromJson(e as Map<String, dynamic>)),
       ),
+      peersRemoved: (json['peers_removed'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       rid: json['rid'] as int?,
       showFlags: json['show_flags'] as bool?,
     );
@@ -26,6 +29,7 @@ Map<String, dynamic> _$PeersDataToJson(PeersData instance) {
 
   writeNotNull('full_update', instance.fullUpdate);
   writeNotNull('peers', instance.peers);
+  writeNotNull('peers_removed', instance.peersRemoved);
   writeNotNull('rid', instance.rid);
   writeNotNull('show_flags', instance.showFlags);
   return val;
