@@ -18,6 +18,7 @@ class MainData {
     this.tagsRemoved,
     this.serverState,
     this.trackers,
+    this.trackersRemoved,
   });
 
   factory MainData.fromJson(Map<String, dynamic> json) =>
@@ -61,6 +62,9 @@ class MainData {
 
   @JsonKey(name: 'trackers')
   final Map<String, List<String>>? trackers;
+
+  @JsonKey(name: 'trackers_removed')
+  final List<String>? trackersRemoved;
 
   Map<String, dynamic> toJson() => _$MainDataToJson(this);
 }
