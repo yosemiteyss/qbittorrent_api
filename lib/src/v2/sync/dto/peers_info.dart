@@ -66,7 +66,7 @@ class PeersInfo {
   final double? progress;
 
   @JsonKey(name: 'relevance')
-  final int? relevance;
+  final double? relevance;
 
   @JsonKey(name: 'up_speed')
   final int? upSpeed;
