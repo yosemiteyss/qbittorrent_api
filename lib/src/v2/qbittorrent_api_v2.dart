@@ -3,6 +3,7 @@ import 'package:qbittorrent_api/src/network/dio_client.dart';
 import 'package:qbittorrent_api/src/v2/application/application_controller.dart';
 import 'package:qbittorrent_api/src/v2/auth/auth_controller.dart';
 import 'package:qbittorrent_api/src/v2/log/log_controller.dart';
+import 'package:qbittorrent_api/src/v2/search/search_controller.dart';
 import 'package:qbittorrent_api/src/v2/sync/sync_controller.dart';
 import 'package:qbittorrent_api/src/v2/torrents/torrents_controller.dart';
 import 'package:qbittorrent_api/src/v2/transfer/transfer_controller.dart';
@@ -35,6 +36,7 @@ class QBittorrentApiV2 {
     application = ApplicationController(_apiClient);
     log = LogController(_apiClient);
     sync = SyncController(_apiClient);
+    search = SearchController(_apiClient);
     transfer = TransferController(_apiClient);
     torrents = TorrentsController(_apiClient);
   }
@@ -45,6 +47,7 @@ class QBittorrentApiV2 {
   late final ApplicationController application;
   late final LogController log;
   late final SyncController sync;
+  late final SearchController search;
   late final TransferController transfer;
   late final TorrentsController torrents;
 }
