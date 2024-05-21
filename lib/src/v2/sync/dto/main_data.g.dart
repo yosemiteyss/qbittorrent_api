@@ -32,6 +32,9 @@ MainData _$MainDataFromJson(Map<String, dynamic> json) => MainData(
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
       ),
+      trackersRemoved: (json['trackers_removed'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$MainDataToJson(MainData instance) {
@@ -53,5 +56,6 @@ Map<String, dynamic> _$MainDataToJson(MainData instance) {
   writeNotNull('tags_removed', instance.tagsRemoved);
   writeNotNull('server_state', instance.serverState);
   writeNotNull('trackers', instance.trackers);
+  writeNotNull('trackers_removed', instance.trackersRemoved);
   return val;
 }
