@@ -1,3 +1,9 @@
+## 1.2.0
+- Added search controller to api clien (thanks to @bhaan)
+- Added trackers removed to main data dto (thanks to @bhaan)
+- Added peers removed to peers data dto (thanks to @bhaan)
+- Fixed change relevance to double on peers info dto (thanks to @bhaan)
+
 ## 1.1.0
 - Fix use int for file priority
 
