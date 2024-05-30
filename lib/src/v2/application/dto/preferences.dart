@@ -436,7 +436,7 @@ class Preferences {
   final bool? anonymousMode;
 
   /// See list of possible values here below.
-  @JsonKey(name: 'proxy_type')
+  @JsonKey(fromJson: proxyTypeFromJson, toJson: proxyTypeToJson)
   final ProxyType? proxyType;
 
   /// Proxy IP address or domain name.

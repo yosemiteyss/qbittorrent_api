@@ -81,7 +81,7 @@ Preferences _$PreferencesFromJson(Map<String, dynamic> json) => Preferences(
       lsd: json['lsd'] as bool?,
       encryption: $enumDecodeNullable(_$EncryptionEnumMap, json['encryption']),
       anonymousMode: json['anonymous_mode'] as bool?,
-      proxyType: $enumDecodeNullable(_$ProxyTypeEnumMap, json['proxy_type']),
+      proxyType: proxyTypeFromJson(json['proxy_type']),
       proxyIp: json['proxy_ip'] as String?,
       proxyPort: json['proxy_port'] as int?,
       proxyPeerConnections: json['proxy_peer_connections'] as bool?,
@@ -265,7 +265,7 @@ Map<String, dynamic> _$PreferencesToJson(Preferences instance) {
   writeNotNull('lsd', instance.lsd);
   writeNotNull('encryption', _$EncryptionEnumMap[instance.encryption]);
   writeNotNull('anonymous_mode', instance.anonymousMode);
-  writeNotNull('proxy_type', _$ProxyTypeEnumMap[instance.proxyType]);
+  writeNotNull('proxy_type', proxyTypeToJson(instance.proxyType));
   writeNotNull('proxy_ip', instance.proxyIp);
   writeNotNull('proxy_port', instance.proxyPort);
   writeNotNull('proxy_peer_connections', instance.proxyPeerConnections);
@@ -401,15 +401,6 @@ const _$EncryptionEnumMap = {
   Encryption.prefer: 0,
   Encryption.forceOn: 1,
   Encryption.forceOff: 2,
-};
-
-const _$ProxyTypeEnumMap = {
-  ProxyType.none: 0,
-  ProxyType.http: 1,
-  ProxyType.socks5: 2,
-  ProxyType.httpAuth: 3,
-  ProxyType.socks5Auth: 4,
-  ProxyType.socks4: 5,
 };
 
 const _$DyndnsServiceEnumMap = {

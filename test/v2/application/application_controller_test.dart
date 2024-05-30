@@ -215,7 +215,8 @@ void main() {
         "web_ui_session_timeout": 3600,
         "web_ui_upnp": false,
         "web_ui_use_custom_http_headers_enabled": false,
-        "web_ui_username": "admin"
+        "web_ui_username": "admin",
+        "proxy_type": 0
       }
       ''', isJson: true);
       final preferences =
@@ -385,6 +386,7 @@ void main() {
       expect(preferences.webUiUpnp, false);
       expect(preferences.webUiUseCustomHttpHeadersEnabled, false);
       expect(preferences.webUiUsername, 'admin');
+      expect(preferences.proxyType, ProxyType.none);
     });
 
     test('setApplicationPreferences set params correctly', () async {
@@ -712,6 +714,30 @@ void main() {
       fakeApiClient.setResponse('C:/Users/Dayman/Downloads');
       final path = await applicationController.getDefaultSavePath();
       expect(path, 'C:/Users/Dayman/Downloads');
+    });
+
+    group('convert proxy type', () {
+      test('convert int type input', () async {
+        fakeApiClient.setResponse('''
+          {
+            "proxy_type": 0
+          }
+        ''', isJson: true);
+        final preferences =
+            await applicationController.getApplicationPreferences();
+        expect(preferences.proxyType, ProxyType.none);
+      });
+
+      test('convert string type input', () async {
+        fakeApiClient.setResponse('''
+          {
+            "proxy_type": "None"
+          }
+        ''', isJson: true);
+        final preferences =
+            await applicationController.getApplicationPreferences();
+        expect(preferences.proxyType, ProxyType.none);
+      });
     });
   });
 }
