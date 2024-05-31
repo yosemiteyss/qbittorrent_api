@@ -1,3 +1,6 @@
+## 1.2.1
+- Fixed `ProxyType` convert string error
+
 ## 1.2.0
 - Added `SearchController` to api client (thanks to @bhaan)
 - Added `trackersRemoved` to `MainData` dto (thanks to @bhaan)
