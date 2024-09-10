@@ -1,3 +1,7 @@
+## 1.2.2
+- Fixed TorrentSort params use snake case
+- Added inactiveSeedingTimeLimit
+
 ## 1.2.1
 - Fixed `ProxyType` convert string error
 
