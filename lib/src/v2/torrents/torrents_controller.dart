@@ -400,12 +400,14 @@ class TorrentsController {
 
   /// Set torrent share limit
   /// [torrents] - The torrents to set the share limit of.
-  /// [ratioLimit] - the max ratio the torrent should be seeded until.
-  /// [seedingTimeLimit] - the max amount of time (minutes) the torrent should be seeded.
+  /// [ratioLimit] - The maximum seeding ratio for the torrent.
+  /// [seedingTimeLimit] - The maximum seeding time (minutes) for the torrent.
+  /// [inactiveSeedingTimeLimit] - The maximum amount of time (minutes) the torrent is allowed to seed while being inactive.
   Future<void> setShareLimit({
     required Torrents torrents,
     required RatioLimit ratioLimit,
     required RatioLimit seedingTimeLimit,
+    required RatioLimit inactiveSeedingTimeLimit,
   }) async {
     await _apiClient.post(
       '/torrents/setShareLimits',
@@ -413,6 +415,7 @@ class TorrentsController {
         'hashes': torrents.toRequestString(),
         'ratioLimit': ratioLimit.ratio,
         'seedingTimeLimit': seedingTimeLimit.ratio,
+        'inactiveSeedingTimeLimit': inactiveSeedingTimeLimit.ratio,
       },
     );
   }

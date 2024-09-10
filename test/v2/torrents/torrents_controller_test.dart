@@ -757,6 +757,7 @@ void main() {
         torrents: const Torrents.all(),
         ratioLimit: const RatioLimit.none(),
         seedingTimeLimit: const RatioLimit.none(),
+        inactiveSeedingTimeLimit: const RatioLimit.none(),
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['ratioLimit'],
@@ -768,6 +769,7 @@ void main() {
         torrents: const Torrents.all(),
         ratioLimit: const RatioLimit(2),
         seedingTimeLimit: const RatioLimit.none(),
+        inactiveSeedingTimeLimit: const RatioLimit.none(),
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['ratioLimit'],
@@ -779,6 +781,7 @@ void main() {
         torrents: const Torrents.all(),
         ratioLimit: const RatioLimit.global(),
         seedingTimeLimit: const RatioLimit.none(),
+        inactiveSeedingTimeLimit: const RatioLimit.none(),
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['ratioLimit'],
@@ -793,6 +796,7 @@ void main() {
         torrents: const Torrents.all(),
         ratioLimit: const RatioLimit.none(),
         seedingTimeLimit: const RatioLimit.none(),
+        inactiveSeedingTimeLimit: const RatioLimit.none(),
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['seedingTimeLimit'],
@@ -804,6 +808,7 @@ void main() {
         torrents: const Torrents.all(),
         ratioLimit: const RatioLimit.none(),
         seedingTimeLimit: const RatioLimit(2),
+        inactiveSeedingTimeLimit: const RatioLimit.none(),
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['seedingTimeLimit'],
@@ -815,6 +820,7 @@ void main() {
         torrents: const Torrents.all(),
         ratioLimit: const RatioLimit.none(),
         seedingTimeLimit: const RatioLimit.global(),
+        inactiveSeedingTimeLimit: const RatioLimit.none(),
       );
       expect(
         (fakeApiClient.getBody() as Map<String, dynamic>?)?['seedingTimeLimit'],
