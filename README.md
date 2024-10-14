@@ -14,6 +14,15 @@ Supported Web API version: `qBittorrent v4.1+`
 ## Setup
 Create a `QBittorrentApiV2` instance by providing the URL of your qBittorrent server.
 ```dart
+final qbittorrent = QBittorrentApiV2(
+  baseUrl: 'http://localhost:8080',   // Replace with the actual URL of your qBittorrent server
+  cookiePath: cookiePath,             // Path where login cookies is stored
+  logger: true,                       // Enable logging
+);
+```
+
+For Flutter application, set `cookiePath: null` for web environment as cookies are managed by the browser.
+```dart
 String? cookiePath;
 
 // Cookies path for non-web applications.
@@ -23,9 +32,9 @@ if (!kIsWeb) {
 }
 
 final qbittorrent = QBittorrentApiV2(
-  baseUrl: 'http://localhost:8080',   // Replace with the actual URL of your qBittorrent server
-  cookiePath: cookiePath,             // Path where login cookies is stored
-  logger: true,                       // Enable logging
+  baseUrl: 'http://localhost:8080',
+  cookiePath: cookiePath,
+  logger: kDebugMode,
 );
 ```
 
