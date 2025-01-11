@@ -68,6 +68,10 @@ enum TorrentState {
   @JsonValue('forcedDL')
   forcedDL,
 
+  /// Torrent is stopped and not uploading
+  @JsonValue('stoppedUP')
+  stoppedUP,
+
   /// Checking resume data on qBt startup
   @JsonValue('checkingResumeData')
   checkingResumeData,
