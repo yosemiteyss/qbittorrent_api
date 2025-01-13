@@ -141,6 +141,7 @@ const _$TorrentStateEnumMap = {
   TorrentState.stalledDL: 'stalledDL',
   TorrentState.checkingDL: 'checkingDL',
   TorrentState.forcedDL: 'forcedDL',
+  TorrentState.stoppedUP: 'stoppedUP',
   TorrentState.checkingResumeData: 'checkingResumeData',
   TorrentState.moving: 'moving',
   TorrentState.unknown: 'unknown',
