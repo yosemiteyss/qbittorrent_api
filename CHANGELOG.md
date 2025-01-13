@@ -1,3 +1,6 @@
+## 1.2.3
+- Added stoppedUP state
+
 ## 1.2.2
 - Fixed TorrentSort params use snake case
 - Added inactiveSeedingTimeLimit
