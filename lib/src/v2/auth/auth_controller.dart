@@ -23,6 +23,7 @@ class AuthController {
         'username': username,
         'password': password,
       },
+      setCookies: true,
     );
 
     // Throw unauthorized exception here as qBittorrent returns status code 200

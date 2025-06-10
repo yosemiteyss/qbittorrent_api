@@ -83,6 +83,7 @@ class DioClient implements ApiClient {
     Map<String, String>? headers,
     Map<String, dynamic>? formData,
     bool returnBytes = false,
+    bool setCookies = false,
   }) async {
     final dynamic requestData;
     if (formData != null) {
@@ -130,6 +131,24 @@ class DioClient implements ApiClient {
           responseType: returnBytes ? ResponseType.bytes : ResponseType.plain,
         ),
       );
+
+      if (setCookies) {
+        final setCookieHeaders = response.headers['set-cookie'];
+        if (setCookieHeaders != null) {
+          _dio.interceptors.removeWhere((i) => i is InterceptorsWrapper && i.runtimeType.toString().contains('CookieInterceptor'));
+          for (final header in setCookieHeaders) {
+            _dio.interceptors.add(
+              InterceptorsWrapper(
+                onRequest: (options, handler) {
+                  options.headers['Cookie'] = header;
+                  return handler.next(options);
+                },
+              ),
+            );
+          }
+        }
+      }
+
       return _convertDataFormat(response);
     });
   }

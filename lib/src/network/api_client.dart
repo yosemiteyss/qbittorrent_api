@@ -15,6 +15,7 @@ abstract interface class ApiClient {
     Map<String, String>? headers,
     Map<String, dynamic>? formData,
     bool returnBytes,
+    bool setCookies,
   });
 
   Future<void> clearCookies();

@@ -36,6 +36,7 @@ class FakeApiClient implements ApiClient {
     Map<String, String>? headers,
     Map<String, dynamic>? formData,
     bool returnBytes = false,
+    bool setCookies = false,
   }) async {
     _path = path;
     _params = params;
