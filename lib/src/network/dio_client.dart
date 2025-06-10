@@ -132,7 +132,7 @@ class DioClient implements ApiClient {
         ),
       );
 
-      if (setCookies) {
+      if (setCookies && cookiePath == null) {
         final setCookieHeaders = response.headers['set-cookie'];
         if (setCookieHeaders != null) {
           _dio.interceptors.removeWhere((i) => i is InterceptorsWrapper && i.runtimeType.toString().contains('CookieInterceptor'));
