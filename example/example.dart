@@ -3,7 +3,7 @@ import 'package:qbittorrent_api/qbittorrent_api.dart';
 Future<void> main() async {
   final qbittorrent = QBittorrentApiV2(
     baseUrl: 'http://localhost:8090',
-    cookiePath: '.',
+    cookiesStrategy: const DiskCookiesStrategy(directory: '.cookies'),
     logger: true,
   );
 

@@ -15,7 +15,7 @@ import 'package:qbittorrent_api/src/network/dio_logging_interceptor.dart';
 class DioClient implements ApiClient {
   DioClient({
     required this.baseUrl,
-    required this.cookiePath,
+    required this.cookiesStrategy,
     required Duration connectTimeout,
     required Duration receiveTimeout,
     required Duration sendTimeout,
@@ -29,14 +29,17 @@ class DioClient implements ApiClient {
       ),
     );
 
-    if (cookiePath != null) {
-      _persistCookieJar = PersistCookieJar(
-        ignoreExpires: true,
-        storage: FileStorage('$cookiePath/.cookies/'),
-      );
-      _dio.interceptors.add(
-        CookieManager(_persistCookieJar!),
-      );
+    final _cookiesStrategy = cookiesStrategy;
+    if (_cookiesStrategy != null) {
+      _cookieJar = switch (_cookiesStrategy) {
+        InMemoryCookiesStrategy() => CookieJar(),
+        DiskCookiesStrategy() => PersistCookieJar(
+            ignoreExpires: true,
+            storage: FileStorage(_cookiesStrategy.normalizedDirectory),
+          ),
+        WebCookiesStrategy() => WebCookieJar(),
+      };
+      _dio.interceptors.add(CookieManager(_cookieJar!));
     }
 
     if (logger) {
@@ -46,12 +49,13 @@ class DioClient implements ApiClient {
     }
   }
 
+  final CookiesStrategy? cookiesStrategy;
+
   late final Dio _dio;
-  PersistCookieJar? _persistCookieJar;
+  CookieJar? _cookieJar;
 
   @override
   final String baseUrl;
-  final String? cookiePath;
 
   @override
   Future<dynamic> get(
@@ -136,7 +140,9 @@ class DioClient implements ApiClient {
 
   @override
   Future<void> clearCookies() async {
-    await _persistCookieJar?.deleteAll();
+    if (_cookieJar != null) {
+      await _cookieJar?.deleteAll();
+    }
   }
 
   dynamic _convertDataFormat(Response<dynamic> response) {

@@ -1,5 +1,6 @@
 library;
 
+export 'src/network/cookies_strategy.dart';
 export 'src/v2/application/application.dart';
 export 'src/v2/exception/exception.dart';
 export 'src/v2/log/log.dart';
