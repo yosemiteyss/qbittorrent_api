@@ -18,7 +18,15 @@ sealed class CookiesStrategy extends Equatable {
 /// {@endtemplate}
 final class InMemoryCookiesStrategy extends CookiesStrategy {
   /// {@macro in_memory_cookies_strategy}
-  const InMemoryCookiesStrategy();
+  const InMemoryCookiesStrategy({
+    this.ignoreExpires = true,
+  });
+
+  /// Ignore expired cookies.
+  final bool ignoreExpires;
+
+  @override
+  List<Object?> get props => [ignoreExpires];
 }
 
 /// {@template disk_cookies_strategy}
@@ -28,10 +36,14 @@ final class DiskCookiesStrategy extends CookiesStrategy {
   /// {@macro disk_cookies_strategy}
   const DiskCookiesStrategy({
     required this.directory,
+    this.ignoreExpires = true,
   });
 
   /// The directory where cookies will be stored.
   final String directory;
+
+  /// Ignore expired cookies.
+  final bool ignoreExpires;
 
   /// The normalized directory with a trailing slash.
   String get normalizedDirectory => directory.endsWith(Platform.pathSeparator)
@@ -39,7 +51,7 @@ final class DiskCookiesStrategy extends CookiesStrategy {
       : '$directory${Platform.pathSeparator}';
 
   @override
-  List<Object?> get props => [directory];
+  List<Object?> get props => [directory, ignoreExpires];
 }
 
 /// {@template no_cookies_strategy}

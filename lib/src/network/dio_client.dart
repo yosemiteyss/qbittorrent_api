@@ -32,10 +32,13 @@ class DioClient implements ApiClient {
     final _cookiesStrategy = cookiesStrategy;
     if (_cookiesStrategy != null) {
       _cookieJar = switch (_cookiesStrategy) {
-        InMemoryCookiesStrategy() => CookieJar(),
-        DiskCookiesStrategy() => PersistCookieJar(
-            ignoreExpires: true,
-            storage: FileStorage(_cookiesStrategy.normalizedDirectory),
+        InMemoryCookiesStrategy(:final ignoreExpires) => CookieJar(
+            ignoreExpires: ignoreExpires,
+          ),
+        DiskCookiesStrategy(:final ignoreExpires, :final normalizedDirectory) =>
+          PersistCookieJar(
+            storage: FileStorage(normalizedDirectory),
+            ignoreExpires: ignoreExpires,
           ),
         WebCookiesStrategy() => WebCookieJar(),
       };
