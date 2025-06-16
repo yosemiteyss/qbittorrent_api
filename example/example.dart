@@ -7,17 +7,22 @@ Future<void> main() async {
     logger: true,
   );
 
-  // Login
-  await qbittorrent.auth.login(username: 'admin', password: 'adminadmin');
+  try {
+    // Login
+    await qbittorrent.auth.login(username: 'admin', password: 'adminadmin');
 
-  // Add torrents by urls
-  const torrents = NewTorrents.urls(
-    urls: ['https://example.torrent', 'https://example-2.torrent'],
-  );
-  await qbittorrent.torrents.addNewTorrents(torrents: torrents);
+    // Add torrents by urls
+    const torrents = NewTorrents.urls(
+      urls: ['https://example.torrent', 'https://example-2.torrent'],
+    );
+    await qbittorrent.torrents.addNewTorrents(torrents: torrents);
 
-  // Subscribe to torrent list
-  qbittorrent.sync.subscribeMainData().listen((data) {
-    print(data.rid);
-  });
+    // Subscribe to torrent list
+    qbittorrent.sync.subscribeMainData().listen((data) {
+      print(data.rid);
+    });
+  } on QBittorrentException catch (e) {
+    print('Error: ${e.message}');
+    return;
+  }
 }
