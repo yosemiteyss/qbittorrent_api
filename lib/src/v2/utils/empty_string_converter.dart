@@ -1,7 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template list_item_converter}
 /// Convert empty string to nullable int type.
+/// {@endtemplate}
 class EmptyStringToInt implements JsonConverter<int?, dynamic> {
+  /// {@macro list_item_converter}
   const EmptyStringToInt();
 
   @override

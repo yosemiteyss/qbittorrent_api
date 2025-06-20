@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_lambdas
-
 import 'dart:typed_data';
 
 import 'package:qbittorrent_api/src/network/api_client.dart';
@@ -18,7 +16,11 @@ import 'package:qbittorrent_api/src/v2/torrents/dto/web_seed.dart';
 import 'package:qbittorrent_api/src/v2/transfer/dto/peer.dart';
 import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
+/// {@template torrents_controller}
+/// Controller for torrents endpoints.
+/// {@endtemplate}
 class TorrentsController {
+  /// {@macro torrents_controller}
   const TorrentsController(ApiClient apiClient) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
@@ -28,11 +30,13 @@ class TorrentsController {
   Future<List<TorrentInfo>> getTorrentsList({
     required TorrentListOptions options,
   }) async {
-    final List<dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<List<dynamic>>(
       '/torrents/info',
       params: options.toJson(),
     );
-    return data.map((e) => TorrentInfo.fromJson(e)).toList();
+    return response
+        .map((e) => TorrentInfo.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Subscribe to torrent list changes by polling.
@@ -48,17 +52,19 @@ class TorrentsController {
   }
 
   /// Get torrent generic properties
-  /// [hash] - The hash of the torrent you want to get the generic properties of.
+  /// [hash] - The hash of the torrent you want to get the generic properties
+  /// of.
   Future<TorrentProperties> getProperties({required String hash}) async {
-    final Map<String, dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<Map<String, dynamic>>(
       '/torrents/properties',
       params: {'hash': hash},
     );
-    return TorrentProperties.fromJson(data);
+    return TorrentProperties.fromJson(response);
   }
 
   /// Subscribe to torrent generic properties changes by polling.
-  /// [hash] - The hash of the torrent you want to get the generic properties of.
+  /// [hash] - The hash of the torrent you want to get the generic properties
+  /// of.
   /// [interval] - The polling interval.
   Stream<TorrentProperties> subscribeProperties({
     required String hash,
@@ -72,11 +78,13 @@ class TorrentsController {
   /// Get torrent trackers
   /// [hash] - The hash of the torrent you want to get the trackers of
   Future<List<Tracker>> getTrackers({required String hash}) async {
-    final List<dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<List<dynamic>>(
       '/torrents/trackers',
       params: {'hash': hash},
     );
-    return data.map((e) => Tracker.fromJson(e)).toList();
+    return response
+        .map((e) => Tracker.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Subscribe to trackers changes by polling.
@@ -97,11 +105,13 @@ class TorrentsController {
   Future<List<WebSeed>> getWebSeeds({
     required String hash,
   }) async {
-    final List<dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<List<dynamic>>(
       '/torrents/webseeds',
       params: {'hash': hash},
     );
-    return data.map((e) => WebSeed.fromJson(e)).toList();
+    return response
+        .map((e) => WebSeed.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Subscribe to web seeds changes by polling.
@@ -117,19 +127,22 @@ class TorrentsController {
 
   /// Get torrent contents
   /// [hash] - The hash of the torrent you want to get the contents of
-  /// [indexes] - The indexes of the files you want to retrieve. indexes can contain multiple values separated by |.
+  /// [indexes] - The indexes of the files you want to retrieve. indexes can
+  /// contain multiple values separated by |.
   Future<List<TorrentContents>> getContents({
     required String hash,
     String? indexes,
   }) async {
-    final List<dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<List<dynamic>>(
       '/torrents/files',
       params: {
         'hash': hash,
         'indexes': indexes,
       },
     );
-    return data.map((e) => TorrentContents.fromJson(e)).toList();
+    return response
+        .map((e) => TorrentContents.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Subscribe to torrent contents changes by polling.
@@ -148,11 +161,11 @@ class TorrentsController {
   Future<List<PieceState>> getPieceStates({
     required String hash,
   }) async {
-    final List<dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<List<dynamic>>(
       '/torrents/pieceStates',
       params: {'hash': hash},
     );
-    return data.map((e) => PieceState.byValue(e)).toList();
+    return response.map((e) => PieceState.byValue(e as int)).toList();
   }
 
   /// Subscribe to torrent pieces' states changes by polling.
@@ -172,17 +185,17 @@ class TorrentsController {
   Future<List<String>> getPieceHashes({
     required String hash,
   }) async {
-    final List<dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<List<dynamic>>(
       '/torrents/pieceHashes',
       params: {'hash': hash},
     );
-    return data.map((e) => e as String).toList();
+    return response.map((e) => e as String).toList();
   }
 
   /// Pause torrents
   /// [torrents] - The torrents to pause
   Future<void> pauseTorrents({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/pause',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -191,7 +204,7 @@ class TorrentsController {
   /// Resume torrents
   /// [torrents] - The torrents to resume
   Future<void> resumeTorrents({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/resume',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -199,12 +212,13 @@ class TorrentsController {
 
   /// Delete torrents
   /// [torrents] - The torrents to delete.
-  /// [deleteFiles] - If set to true, the downloaded data will also be deleted, otherwise has no effect.
+  /// [deleteFiles] - If set to true, the downloaded data will also be deleted,
+  /// otherwise has no effect.
   Future<void> deleteTorrents({
     required Torrents torrents,
     bool? deleteFiles,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/delete',
       body: {
         'hashes': torrents.toRequestString(),
@@ -216,7 +230,7 @@ class TorrentsController {
   /// Recheck torrents
   /// [torrents] - The torrents to recheck
   Future<void> recheckTorrents({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/recheck',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -225,7 +239,7 @@ class TorrentsController {
   /// Reannounce torrents
   /// [torrents] - The torrents to reannounce
   Future<void> reannounceTorrents({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/reannounce',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -234,7 +248,7 @@ class TorrentsController {
   /// Add new torrent
   /// [torrents] - The torrent files or urls to add
   Future<void> addNewTorrents({required NewTorrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/add',
       formData: torrents.toFormData(),
     );
@@ -247,7 +261,7 @@ class TorrentsController {
     required String hash,
     required List<String> urls,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/addTrackers',
       body: {
         'hash': hash,
@@ -265,7 +279,7 @@ class TorrentsController {
     required String origUrl,
     required String newUrl,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/editTracker',
       body: {
         'hash': hash,
@@ -282,7 +296,7 @@ class TorrentsController {
     required String hash,
     required List<String> urls,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/removeTrackers',
       body: {
         'hash': hash,
@@ -300,7 +314,7 @@ class TorrentsController {
     required List<String> hashes,
     required List<Peer> peers,
   }) async {
-    final Map<String, dynamic> data = await _apiClient.post(
+    final response = await _apiClient.post<Map<String, dynamic>>(
       '/torrents/addPeers',
       body: {
         'hashes': const ListItemConverter.bar().toJson(hashes),
@@ -309,15 +323,18 @@ class TorrentsController {
         ),
       },
     );
-    return data.map(
-      (key, value) => MapEntry(key, AddPeersResult.fromJson(value)),
+    return response.map(
+      (key, value) => MapEntry(
+        key,
+        AddPeersResult.fromJson(value as Map<String, dynamic>),
+      ),
     );
   }
 
   /// Increase torrent priority
   /// [torrents] - The torrents you want to increase the priority of.
   Future<void> increasePriority({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/increasePrio',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -326,7 +343,7 @@ class TorrentsController {
   /// Decrease torrent priority
   /// [torrents] - The torrents you want to decrease the priority of.
   Future<void> decreasePriority({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/decreasePrio',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -335,7 +352,7 @@ class TorrentsController {
   /// Maximal torrent priority
   /// [torrents] - The torrents you want to set to the maximum priority.
   Future<void> maxPriority({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/topPrio',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -344,7 +361,7 @@ class TorrentsController {
   /// Minimal torrent priority
   /// [torrents] - The torrents you want to set to the minimum priority.
   Future<void> minPriority({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/bottomPrio',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -359,7 +376,7 @@ class TorrentsController {
     required List<String> fileIds,
     required int priority,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/filePrio',
       body: {
         'hash': hash,
@@ -375,11 +392,11 @@ class TorrentsController {
   Future<Map<String, int>> getDownloadLimit({
     required Torrents torrents,
   }) async {
-    final Map<String, dynamic> data = await _apiClient.post(
+    final response = await _apiClient.post<Map<String, dynamic>>(
       '/torrents/downloadLimit',
       body: {'hashes': torrents.toRequestString()},
     );
-    return data.map((key, value) => MapEntry(key, value as int));
+    return response.map((key, value) => MapEntry(key, value as int));
   }
 
   /// Set torrent download limit
@@ -389,7 +406,7 @@ class TorrentsController {
     required Torrents torrents,
     required int limit,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setDownloadLimit',
       body: {
         'hashes': torrents.toRequestString(),
@@ -402,14 +419,15 @@ class TorrentsController {
   /// [torrents] - The torrents to set the share limit of.
   /// [ratioLimit] - The maximum seeding ratio for the torrent.
   /// [seedingTimeLimit] - The maximum seeding time (minutes) for the torrent.
-  /// [inactiveSeedingTimeLimit] - The maximum amount of time (minutes) the torrent is allowed to seed while being inactive.
+  /// [inactiveSeedingTimeLimit] - The maximum amount of time (minutes) the
+  /// torrent is allowed to seed while being inactive.
   Future<void> setShareLimit({
     required Torrents torrents,
     required RatioLimit ratioLimit,
     required RatioLimit seedingTimeLimit,
     required RatioLimit inactiveSeedingTimeLimit,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setShareLimits',
       body: {
         'hashes': torrents.toRequestString(),
@@ -426,11 +444,11 @@ class TorrentsController {
   Future<Map<String, int>> getUploadLimit({
     required Torrents torrents,
   }) async {
-    final Map<String, dynamic> data = await _apiClient.post(
+    final response = await _apiClient.post<Map<String, dynamic>>(
       '/torrents/uploadLimit',
       body: {'hashes': torrents.toRequestString()},
     );
-    return data.map((key, value) => MapEntry(key, value as int));
+    return response.map((key, value) => MapEntry(key, value as int));
   }
 
   /// Set torrent upload limit
@@ -440,7 +458,7 @@ class TorrentsController {
     required Torrents torrents,
     required int limit,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setUploadLimit',
       body: {
         'hashes': torrents.toRequestString(),
@@ -457,7 +475,7 @@ class TorrentsController {
     required Torrents torrents,
     required String location,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setLocation',
       body: {
         'hashes': torrents.toRequestString(),
@@ -470,7 +488,7 @@ class TorrentsController {
   /// [hash] - The hash of the torrent
   /// [name] - The new name of the torrent
   Future<void> rename({required String hash, required String name}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/rename',
       body: {'hash': hash, 'name': name},
     );
@@ -483,7 +501,7 @@ class TorrentsController {
     required Torrents torrents,
     required String category,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setCategory',
       body: {
         'hashes': torrents.toRequestString(),
@@ -494,11 +512,14 @@ class TorrentsController {
 
   /// Get all categories
   Future<Map<String, Category>> getCategories() async {
-    final Map<String, dynamic> data = await _apiClient.get(
+    final response = await _apiClient.get<Map<String, dynamic>>(
       '/torrents/categories',
     );
-    return data.map(
-      (key, value) => MapEntry(key, Category.fromJson(value)),
+    return response.map(
+      (key, value) => MapEntry(
+        key,
+        Category.fromJson(value as Map<String, dynamic>),
+      ),
     );
   }
 
@@ -507,7 +528,7 @@ class TorrentsController {
     required String name,
     required String savePath,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/createCategory',
       body: {'category': name, 'savePath': savePath},
     );
@@ -518,7 +539,7 @@ class TorrentsController {
     required String name,
     required String savePath,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/editCategory',
       body: {'category': name, 'savePath': savePath},
     );
@@ -527,7 +548,7 @@ class TorrentsController {
   /// Remove categories
   /// [categories] - Names of the categories to remove
   Future<void> removeCategories({required List<String> categories}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/removeCategories',
       body: {
         'categories': const ListItemConverter.newline().toJson(categories),
@@ -542,7 +563,7 @@ class TorrentsController {
     required Torrents torrents,
     required List<String> tags,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/addTags',
       body: {
         'hashes': torrents.toRequestString(),
@@ -559,7 +580,7 @@ class TorrentsController {
     required Torrents torrents,
     required List<String> tags,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/removeTags',
       body: {
         'hashes': torrents.toRequestString(),
@@ -570,14 +591,14 @@ class TorrentsController {
 
   /// Get all tags
   Future<List<String>> getTags() async {
-    final List<dynamic> data = await _apiClient.get('/torrents/tags');
-    return data.map((e) => e as String).toList();
+    final response = await _apiClient.get<List<dynamic>>('/torrents/tags');
+    return response.map((e) => e as String).toList();
   }
 
   /// Create tags
   /// [tags] - The list of tags you want to create
   Future<void> createTags({required List<String> tags}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/createTags',
       body: {
         'tags': const ListItemConverter.comma().toJson(tags),
@@ -588,7 +609,7 @@ class TorrentsController {
   /// Delete tags
   /// [tags] - The list of tags you want to delete
   Future<void> deleteTags({required List<String> tags}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/deleteTags',
       body: {
         'tags': const ListItemConverter.comma().toJson(tags),
@@ -603,7 +624,7 @@ class TorrentsController {
     required Torrents torrents,
     required bool enable,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setAutoManagement',
       body: {
         'hashes': torrents.toRequestString(),
@@ -615,7 +636,7 @@ class TorrentsController {
   /// Toggle sequential download
   /// [torrents] - The torrents to toggle sequential download of.
   Future<void> toggleSequentialDownload({required Torrents torrents}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/toggleSequentialDownload',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -626,7 +647,7 @@ class TorrentsController {
   Future<void> toggleFirstLastPiecePriority({
     required Torrents torrents,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/toggleFirstLastPiecePrio',
       body: {'hashes': torrents.toRequestString()},
     );
@@ -639,7 +660,7 @@ class TorrentsController {
     required Torrents torrents,
     required bool enable,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setForceStart',
       body: {
         'hashes': torrents.toRequestString(),
@@ -654,7 +675,7 @@ class TorrentsController {
     required Torrents torrents,
     required bool enable,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/setSuperSeeding',
       body: {
         'hashes': torrents.toRequestString(),
@@ -672,7 +693,7 @@ class TorrentsController {
     required String oldPath,
     required String newPath,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/renameFile',
       body: {
         'hash': hash,
@@ -691,7 +712,7 @@ class TorrentsController {
     required String oldPath,
     required String newPath,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/torrents/renameFolder',
       body: {
         'hash': hash,
@@ -705,10 +726,11 @@ class TorrentsController {
   /// [hash] - The hash of the torrent
   /// Return the torrent file as bytes.
   Future<Uint8List> exportTorrent({required String hash}) async {
-    return await _apiClient.post(
+    final response = await _apiClient.post<Uint8List>(
       '/torrents/export',
       body: {'hash': hash},
       returnBytes: true,
     );
+    return response;
   }
 }

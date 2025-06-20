@@ -25,7 +25,7 @@ void main() {
     applicationController = ApplicationController(fakeApiClient);
   });
 
-  group('test ApplicationController', () {
+  group('ApplicationController', () {
     test('getApplicationVersion returns application version', () async {
       fakeApiClient.setResponse('v4.5.4');
       final version = await applicationController.getApplicationVersion();
@@ -545,7 +545,8 @@ void main() {
       await applicationController.setApplicationPreferences(preferences);
 
       final body = fakeApiClient.getBody() as String;
-      final jsonBody = jsonDecode(body.replaceAll('json=', ''));
+      final jsonBody =
+          jsonDecode(body.replaceAll('json=', '')) as Map<String, dynamic>;
       expect(jsonBody['add_trackers'], '');
       expect(jsonBody['add_trackers_enabled'], false);
       expect(jsonBody['alt_dl_limit'], 10240);
@@ -657,15 +658,18 @@ void main() {
       expect(jsonBody['save_path_changed_tmm_enabled'], false);
       expect(jsonBody['save_resume_data_interval'], 60);
       expect(
-        jsonBody['scan_dirs']['/home/user/Downloads/incoming/games'],
+        (jsonBody['scan_dirs']
+            as Map<String, dynamic>)['/home/user/Downloads/incoming/games'],
         0,
       );
       expect(
-        jsonBody['scan_dirs']['/home/user/Downloads/incoming/movies'],
+        (jsonBody['scan_dirs']
+            as Map<String, dynamic>)['/home/user/Downloads/incoming/movies'],
         1,
       );
       expect(
-        jsonBody['scan_dirs']['/home/user/Downloads/incoming/documents'],
+        (jsonBody['scan_dirs']
+            as Map<String, dynamic>)['/home/user/Downloads/incoming/documents'],
         '/Downloads',
       );
       expect(jsonBody['schedule_from_hour'], 8);

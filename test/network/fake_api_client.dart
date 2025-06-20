@@ -1,5 +1,3 @@
-// ignore_for_file: use_setters_to_change_properties
-
 import 'dart:convert';
 
 import 'package:qbittorrent_api/src/network/api_client.dart';
@@ -10,13 +8,13 @@ class FakeApiClient implements ApiClient {
   Map<String, dynamic>? _params;
   Map<String, String>? _headers;
   Map<String, dynamic>? _formData;
-  Object? _body;
+  dynamic _body;
 
   @override
   String get baseUrl => 'localhost:8090/api/v2';
 
   @override
-  Future<dynamic> get(
+  Future<T> get<T>(
     String path, {
     Map<String, dynamic>? params,
     Map<String, String>? headers,
@@ -25,11 +23,11 @@ class FakeApiClient implements ApiClient {
     _path = path;
     _params = params;
     _headers = headers;
-    return _response;
+    return _response as T;
   }
 
   @override
-  Future<dynamic> post(
+  Future<T> post<T>(
     String path, {
     Map<String, dynamic>? params,
     Object? body,
@@ -42,7 +40,7 @@ class FakeApiClient implements ApiClient {
     _body = body;
     _headers = headers;
     _formData = formData;
-    return _response;
+    return _response as T;
   }
 
   @override
@@ -50,7 +48,7 @@ class FakeApiClient implements ApiClient {
 
   void setResponse(dynamic response, {bool isJson = false}) {
     if (isJson) {
-      _response = jsonDecode(response);
+      _response = jsonDecode(response as String);
     } else {
       _response = response;
     }
@@ -60,7 +58,7 @@ class FakeApiClient implements ApiClient {
 
   Map<String, dynamic>? getParams() => _params;
 
-  Object? getBody() => _body;
+  dynamic getBody() => _body;
 
   Map<String, String>? getHeaders() => _headers;
 

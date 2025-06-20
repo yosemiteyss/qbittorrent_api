@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -12,7 +10,11 @@ import 'package:qbittorrent_api/qbittorrent_api.dart';
 import 'package:qbittorrent_api/src/network/api_client.dart';
 import 'package:qbittorrent_api/src/network/dio_logging_interceptor.dart';
 
+/// {@template dio_client}
+/// A client for making HTTP requests using Dio.
+/// {@endtemplate}
 class DioClient implements ApiClient {
+  /// {@macro dio_client}
   DioClient({
     required this.baseUrl,
     required this.cookiesStrategy,
@@ -29,9 +31,9 @@ class DioClient implements ApiClient {
       ),
     );
 
-    final _cookiesStrategy = cookiesStrategy;
-    if (_cookiesStrategy != null) {
-      _cookieJar = switch (_cookiesStrategy) {
+    final strategy = cookiesStrategy;
+    if (strategy != null) {
+      _cookieJar = switch (strategy) {
         InMemoryCookiesStrategy(:final ignoreExpires) => CookieJar(
             ignoreExpires: ignoreExpires,
           ),
@@ -47,11 +49,15 @@ class DioClient implements ApiClient {
 
     if (logger) {
       _dio.interceptors.add(
-        DioLoggingInterceptor(level: Level.body),
+        DioLoggingInterceptor(
+          tag: 'qbittorrent_api',
+          level: LoggingLevel.body,
+        ),
       );
     }
   }
 
+  /// Strategy for managing cookies.
   final CookiesStrategy? cookiesStrategy;
 
   late final Dio _dio;
@@ -61,29 +67,28 @@ class DioClient implements ApiClient {
   final String baseUrl;
 
   @override
-  Future<dynamic> get(
+  Future<T> get<T>(
     String path, {
     Map<String, dynamic>? params,
     Map<String, String>? headers,
     bool returnBytes = false,
   }) {
-    params?.removeWhere((key, value) => value == null);
     return _exceptionHandler(() async {
-      final response = await _dio.get<dynamic>(
+      final response = await _dio.get<T>(
         baseUrl + path,
-        queryParameters: params,
+        queryParameters: params?..removeWhere((key, value) => value == null),
         options: Options(
           headers: headers,
           contentType: Headers.formUrlEncodedContentType,
           responseType: returnBytes ? ResponseType.bytes : ResponseType.plain,
         ),
       );
-      return _convertDataFormat(response);
+      return response.data as T;
     });
   }
 
   @override
-  Future<dynamic> post(
+  Future<T> post<T>(
     String path, {
     Map<String, dynamic>? params,
     Object? body,
@@ -91,16 +96,44 @@ class DioClient implements ApiClient {
     Map<String, dynamic>? formData,
     bool returnBytes = false,
   }) async {
+    return _exceptionHandler(() async {
+      final response = await _dio.post<T>(
+        baseUrl + path,
+        queryParameters: params?..removeWhere((key, value) => value == null),
+        data: await _buildPostRequestData(formData, body),
+        options: Options(
+          headers: headers,
+          contentType: Headers.formUrlEncodedContentType,
+          responseType: returnBytes ? ResponseType.bytes : ResponseType.plain,
+        ),
+      );
+      return response.data as T;
+    });
+  }
+
+  @override
+  Future<void> clearCookies() async {
+    if (_cookieJar != null) {
+      await _cookieJar?.deleteAll();
+    }
+  }
+
+  Future<dynamic> _buildPostRequestData(
+    Map<String, dynamic>? formData,
+    Object? body,
+  ) async {
     final dynamic requestData;
     if (formData != null) {
       for (final entry in formData.entries) {
         final key = entry.key;
         final value = entry.value;
+
         // Convert File to MultipartFile
         if (value is File) {
           formData[key] = [await value.toMultipartFile()];
           continue;
         }
+
         // Convert List<File> to List<MultipartFile>
         if (value is List<File>) {
           formData[key] = await Future.wait(
@@ -108,11 +141,13 @@ class DioClient implements ApiClient {
           );
           continue;
         }
+
         // Convert FileBytes to MultipartFile
         if (value is FileBytes) {
           formData[key] = [value.toMultipartFile()];
           continue;
         }
+
         // Convert List<FileBytes> to List<MultipartFile>
         if (value is List<FileBytes>) {
           formData[key] = value.map((file) => file.toMultipartFile()).toList();
@@ -124,47 +159,11 @@ class DioClient implements ApiClient {
       requestData = body;
     }
 
-    params?.removeWhere((key, value) => value == null);
-
-    return _exceptionHandler(() async {
-      final response = await _dio.post<dynamic>(
-        baseUrl + path,
-        queryParameters: params,
-        data: requestData,
-        options: Options(
-          headers: headers,
-          contentType: Headers.formUrlEncodedContentType,
-          responseType: returnBytes ? ResponseType.bytes : ResponseType.plain,
-        ),
-      );
-      return _convertDataFormat(response);
-    });
+    return requestData;
   }
 
-  @override
-  Future<void> clearCookies() async {
-    if (_cookieJar != null) {
-      await _cookieJar?.deleteAll();
-    }
-  }
-
-  dynamic _convertDataFormat(Response<dynamic> response) {
-    final headers = response.headers[Headers.contentTypeHeader];
-    final contentType = headers?.first.split(';').first;
-
-    if (contentType == Headers.jsonContentType) {
-      return jsonDecode(response.data);
-    }
-
-    if (response.data is List<int>) {
-      return response.data as Uint8List;
-    }
-
-    return response.data as String?;
-  }
-
-  Future<dynamic> _exceptionHandler(
-    Future<dynamic> Function() callback,
+  Future<T> _exceptionHandler<T>(
+    Future<T> Function() callback,
   ) async {
     try {
       return await callback();
@@ -180,13 +179,17 @@ class DioClient implements ApiClient {
       );
     } catch (e) {
       throw QBittorrentException(
-        message: 'Unknown error: ${e.toString()}',
+        message: 'Unknown error: $e',
       );
     }
   }
 }
 
+/// {@template file_extensions}
+/// Extensions for [File].
+/// {@endtemplate}
 extension FileExtensions on File {
+  /// Converts the file to a [MultipartFile].
   Future<MultipartFile> toMultipartFile() {
     return MultipartFile.fromFile(
       path,
@@ -196,7 +199,11 @@ extension FileExtensions on File {
   }
 }
 
+/// {@template file_bytes_extensions}
+/// Extensions for [FileBytes].
+/// {@endtemplate}
 extension BytesFileExtensions on FileBytes {
+  /// Converts the file bytes to a [MultipartFile].
   MultipartFile toMultipartFile() {
     return MultipartFile.fromBytes(
       bytes,

@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template torrent_state}
+/// Torrent state.
+/// {@endtemplate}
 enum TorrentState {
   /// Some error occurred, applies to paused torrents
   @JsonValue('error')
@@ -44,7 +47,6 @@ enum TorrentState {
   /// Torrent has just started downloading and is fetching metadata
   @JsonValue('metaDL')
   metaDL,
-
   @JsonValue('forcedMetaDL')
   forcedMetaDL,
 

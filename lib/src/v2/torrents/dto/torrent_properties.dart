@@ -2,8 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'torrent_properties.g.dart';
 
+/// {@template torrent_properties}
+/// Torrent properties.
+/// {@endtemplate}
 @JsonSerializable()
 class TorrentProperties {
+  /// {@macro torrent_properties}
   const TorrentProperties({
     this.savePath,
     this.creationDate,
@@ -46,6 +50,7 @@ class TorrentProperties {
     this.upSpeed,
   });
 
+  /// Create a new instance from a JSON map.
   factory TorrentProperties.fromJson(Map<String, dynamic> json) =>
       _$TorrentPropertiesFromJson(json);
 
@@ -199,5 +204,6 @@ class TorrentProperties {
   @JsonKey(name: 'up_speed')
   final int? upSpeed;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$TorrentPropertiesToJson(this);
 }

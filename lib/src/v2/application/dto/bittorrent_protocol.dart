@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template bittorrent_protocol}
+/// Bittorrent protocol.
+/// {@endtemplate}
 enum BittorrentProtocol {
   /// TCP and UTP
   @JsonValue(0)

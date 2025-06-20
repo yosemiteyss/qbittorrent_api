@@ -3,8 +3,12 @@ import 'package:qbittorrent_api/src/v2/log/dto/log_type.dart';
 
 part 'log.g.dart';
 
+/// {@template log}
+/// Log.
+/// {@endtemplate}
 @JsonSerializable()
 class Log {
+  /// {@macro log}
   const Log({
     this.id,
     this.message,
@@ -12,6 +16,7 @@ class Log {
     this.type,
   });
 
+  /// Creates a new instance from a JSON map.
   factory Log.fromJson(Map<String, dynamic> json) => _$LogFromJson(json);
 
   /// ID of the message.
@@ -22,7 +27,8 @@ class Log {
   @JsonKey(name: 'message')
   final String? message;
 
-  /// Seconds since epoch (Note: switched from milliseconds to seconds in v4.5.0).
+  /// Seconds since epoch
+  /// (Note: switched from milliseconds to seconds in v4.5.0).
   @JsonKey(name: 'timestamp')
   final int? timestamp;
 
@@ -30,5 +36,6 @@ class Log {
   @JsonKey(name: 'type')
   final LogType? type;
 
+  /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() => _$LogToJson(this);
 }

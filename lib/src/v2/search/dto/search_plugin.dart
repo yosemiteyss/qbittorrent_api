@@ -3,8 +3,12 @@ import 'package:qbittorrent_api/src/v2/search/dto/plugin_category.dart';
 
 part 'search_plugin.g.dart';
 
+/// {@template search_plugin}
+/// Search plugin.
+/// {@endtemplate}
 @JsonSerializable()
 class SearchPlugin {
+  /// {@macro search_plugin}
   const SearchPlugin({
     this.enabled,
     this.fullName,
@@ -14,6 +18,7 @@ class SearchPlugin {
     this.version,
   });
 
+  /// Create a new instance from a JSON map.
   factory SearchPlugin.fromJson(Map<String, dynamic> json) =>
       _$SearchPluginFromJson(json);
 
@@ -41,5 +46,6 @@ class SearchPlugin {
   @JsonKey(name: 'version')
   final String? version;
 
+  /// Convert this instance to a JSON map.
   Map<String, dynamic> toJson() => _$SearchPluginToJson(this);
 }

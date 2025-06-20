@@ -1,7 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template list_item_converter}
 /// Converts a list of strings to a string by joining them with a separating
 /// character.
+/// {@endtemplate}
 class ListItemConverter implements JsonConverter<List<String>, String> {
   /// Use comma as separator.
   /// ['a', 'b', 'c'] -> 'a,b,c'

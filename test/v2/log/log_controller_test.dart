@@ -13,7 +13,7 @@ void main() {
     logController = LogController(fakeApiClient);
   });
 
-  group('test LogController', () {
+  group('LogController', () {
     test('getLogs return a list of log', () async {
       fakeApiClient.setResponse('''
       [

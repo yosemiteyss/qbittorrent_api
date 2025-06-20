@@ -3,8 +3,12 @@ import 'package:qbittorrent_api/src/v2/transfer/dto/connection_status.dart';
 
 part 'server_state.g.dart';
 
+/// {@template server_state}
+/// Server state.
+/// {@endtemplate}
 @JsonSerializable()
 class ServerState {
+  /// {@macro server_state}
   const ServerState({
     this.alltimeDl,
     this.alltimeUl,
@@ -32,6 +36,7 @@ class ServerState {
     this.writeCacheOverload,
   });
 
+  /// Create a new instance from a JSON map.
   factory ServerState.fromJson(Map<String, dynamic> json) =>
       _$ServerStateFromJson(json);
 
@@ -107,5 +112,6 @@ class ServerState {
   @JsonKey(name: 'write_cache_overload')
   final String? writeCacheOverload;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$ServerStateToJson(this);
 }

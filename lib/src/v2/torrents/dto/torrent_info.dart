@@ -4,8 +4,12 @@ import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
 part 'torrent_info.g.dart';
 
+/// {@template torrent_info}
+/// Torrent info.
+/// {@endtemplate}
 @JsonSerializable()
 class TorrentInfo {
+  /// {@macro torrent_info}
   const TorrentInfo({
     this.addedOn,
     this.amountLeft,
@@ -58,6 +62,7 @@ class TorrentInfo {
     this.upSpeed,
   });
 
+  /// Create a new instance from a JSON map.
   factory TorrentInfo.fromJson(Map<String, dynamic> json) =>
       _$TorrentInfoFromJson(json);
 
@@ -89,7 +94,8 @@ class TorrentInfo {
   @JsonKey(name: 'completion_on')
   final int? completionOn;
 
-  /// Absolute path of torrent content (root path for multi file torrents, absolute file path for single file torrents)
+  /// Absolute path of torrent content (root path for multi file torrents,
+  /// absolute file path for single file torrents)
   @JsonKey(name: 'content_path')
   final String? contentPath;
 
@@ -230,7 +236,8 @@ class TorrentInfo {
   @JsonKey(name: 'total_size')
   final int? totalSize;
 
-  /// The first tracker with working status. Returns empty string if no tracker is working.
+  /// The first tracker with working status. Returns empty string if no tracker
+  /// is working.
   @JsonKey(name: 'tracker')
   final String? tracker;
 
@@ -253,5 +260,6 @@ class TorrentInfo {
   @JsonKey(name: 'upspeed')
   final int? upSpeed;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$TorrentInfoToJson(this);
 }

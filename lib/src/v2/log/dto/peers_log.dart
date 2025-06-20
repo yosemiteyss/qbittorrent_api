@@ -2,8 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'peers_log.g.dart';
 
+/// {@template peers_log}
+/// Peers log.
+/// {@endtemplate}
 @JsonSerializable()
 class PeersLog {
+  /// {@macro peers_log}
   const PeersLog({
     this.id,
     this.ip,
@@ -12,6 +16,7 @@ class PeersLog {
     this.reason,
   });
 
+  /// Creates a new instance from a JSON map.
   factory PeersLog.fromJson(Map<String, dynamic> json) =>
       _$PeersLogFromJson(json);
 
@@ -35,5 +40,6 @@ class PeersLog {
   @JsonKey(name: 'reason')
   final String? reason;
 
+  /// Converts this instance to a JSON map.
   Map<String, dynamic> toJson() => _$PeersLogToJson(this);
 }

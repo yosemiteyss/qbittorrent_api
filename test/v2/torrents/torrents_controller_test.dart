@@ -24,7 +24,7 @@ void main() {
     torrentsController = TorrentsController(fakeApiClient);
   });
 
-  group('test TorrentsController', () {
+  group('TorrentsController', () {
     test('getTorrentsList returns a list of torrent info', () async {
       fakeApiClient.setResponse('''
       [
@@ -482,7 +482,7 @@ void main() {
       await torrentsController.addNewTorrents(torrents: newTorrents);
 
       final formData = fakeApiClient.getFormData();
-      final firstFile = formData?['torrents']?[0];
+      final firstFile = (formData?['torrents'] as List<dynamic>?)?[0];
       expect(firstFile, isA<File>());
       expect((firstFile as File?)?.path, './test/test.torrent');
     });
@@ -498,7 +498,7 @@ void main() {
       await torrentsController.addNewTorrents(torrents: newTorrents);
 
       final formData = fakeApiClient.getFormData();
-      final firstFile = formData?['torrents']?[0];
+      final firstFile = (formData?['torrents'] as List<dynamic>?)?[0];
       expect(firstFile, isA<FileBytes>());
       expect((firstFile as FileBytes?)?.filename, 'test.torrent');
       expect(firstFile?.bytes, bytes);

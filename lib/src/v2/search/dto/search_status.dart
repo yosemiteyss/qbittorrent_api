@@ -3,10 +3,15 @@ import 'package:qbittorrent_api/src/v2/search/dto/search_job_status.dart';
 
 part 'search_status.g.dart';
 
+/// {@template search_status}
+/// Search status.
+/// {@endtemplate}
 @JsonSerializable()
 class SearchStatus {
+  /// {@macro search_status}
   const SearchStatus({this.id, this.status, this.total});
 
+  /// Create a new instance from a JSON map.
   factory SearchStatus.fromJson(Map<String, dynamic> json) =>
       _$SearchStatusFromJson(json);
 
@@ -23,5 +28,6 @@ class SearchStatus {
   @JsonKey(name: 'total')
   final int? total;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$SearchStatusToJson(this);
 }

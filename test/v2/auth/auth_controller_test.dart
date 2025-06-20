@@ -16,7 +16,7 @@ void main() {
     authController = AuthController(fakeApiClient);
   });
 
-  group('test AuthController', () {
+  group('AuthController', () {
     test('login returns nothing', () async {
       fakeApiClient.setResponse('Ok.');
       await authController.login(

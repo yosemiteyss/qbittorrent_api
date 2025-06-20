@@ -1,12 +1,17 @@
 import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
+/// {@template plugins}
+/// Plugins.
+/// {@endtemplate}
 class Plugins {
+  /// {@macro plugins}
   /// Select multiple plugins.
   const Plugins({required List<String> plugins})
       : _plugins = plugins,
         _selectAll = false,
         _selectEnabled = false;
 
+  /// {@macro plugins}
   /// Select all plugins.
   const Plugins.all()
       : _selectAll = true,
@@ -25,6 +30,7 @@ class Plugins {
 
   final bool _selectEnabled;
 
+  /// Convert to request string.
   String toRequestString() {
     if (_selectEnabled) {
       return 'enabled';

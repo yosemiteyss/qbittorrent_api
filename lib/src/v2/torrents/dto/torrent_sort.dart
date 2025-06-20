@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template torrent_sort}
+/// Torrent sort.
+/// {@endtemplate}
 enum TorrentSort {
   @JsonValue('added_on')
   addedOn,

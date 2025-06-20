@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_lambdas
-
 import 'package:qbittorrent_api/src/network/api_client.dart';
 import 'package:qbittorrent_api/src/v2/search/dto/categories.dart';
 import 'package:qbittorrent_api/src/v2/search/dto/plugins.dart';
@@ -9,7 +7,11 @@ import 'package:qbittorrent_api/src/v2/search/dto/search_result.dart';
 import 'package:qbittorrent_api/src/v2/search/dto/search_status.dart';
 import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
+/// {@template search_controller}
+/// Controller for search endpoints.
+/// {@endtemplate}
 class SearchController {
+  /// {@macro search_controller}
   const SearchController(ApiClient apiClient) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
@@ -23,7 +25,7 @@ class SearchController {
     required Plugins plugins,
     required Categories categories,
   }) async {
-    final Map<String, dynamic> data = await _apiClient.post(
+    final response = await _apiClient.post<Map<String, dynamic>>(
       '/search/start',
       body: {
         'pattern': pattern,
@@ -31,26 +33,29 @@ class SearchController {
         'plugins': plugins.toRequestString(),
       },
     );
-    return SearchJob.fromJson(data);
+    return SearchJob.fromJson(response);
   }
 
   /// Stop search
   /// [id] - ID of the search job
   Future<void> stopSearch({required int id}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/search/stop',
       body: {'id': id},
     );
   }
 
   /// Get search status
-  /// [id] - ID of the search job. If not specified, all search jobs are returned.
+  /// [id] - ID of the search job. If not specified, all search jobs are
+  /// returned.
   Future<List<SearchStatus>> getSearchStatus({int? id}) async {
-    final List<dynamic> data = await _apiClient.post(
+    final response = await _apiClient.post<List<dynamic>>(
       '/search/status',
       body: {'id': id},
     );
-    return data.map((e) => SearchStatus.fromJson(e)).toList();
+    return response
+        .map((e) => SearchStatus.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Get search results
@@ -63,7 +68,7 @@ class SearchController {
     required int? limit,
     required int? offset,
   }) async {
-    final Map<String, dynamic> data = await _apiClient.post(
+    final response = await _apiClient.post<Map<String, dynamic>>(
       '/search/results',
       body: {
         'id': id,
@@ -71,13 +76,13 @@ class SearchController {
         'offset': offset,
       },
     );
-    return SearchResult.fromJson(data);
+    return SearchResult.fromJson(response);
   }
 
   /// Delete search
   /// [id] - ID of the search job
   Future<void> deleteSearch({required int id}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/search/delete',
       body: {'id': id},
     );
@@ -85,14 +90,16 @@ class SearchController {
 
   /// Get search plugins
   Future<List<SearchPlugin>> getPlugins() async {
-    final List<dynamic> data = await _apiClient.get('/search/plugins');
-    return data.map((e) => SearchPlugin.fromJson(e)).toList();
+    final response = await _apiClient.get<List<dynamic>>('/search/plugins');
+    return response
+        .map((e) => SearchPlugin.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Install search plugin
   /// [sources] - Url or file path of the plugin to install
   Future<void> installPlugin({required List<String> sources}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/search/installPlugin',
       body: {
         'sources': const ListItemConverter.bar().toJson(sources),
@@ -103,7 +110,7 @@ class SearchController {
   /// Uninstall search plugin
   /// [names] - Name of the plugin to uninstall
   Future<void> uninstallPlugin({required List<String> names}) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/search/uninstallPlugin',
       body: {
         'names': const ListItemConverter.bar().toJson(names),
@@ -118,7 +125,7 @@ class SearchController {
     required List<String> names,
     required bool enable,
   }) async {
-    await _apiClient.post(
+    await _apiClient.post<void>(
       '/search/enablePlugin',
       body: {
         'names': const ListItemConverter.bar().toJson(names),
@@ -129,6 +136,6 @@ class SearchController {
 
   /// Update search plugins
   Future<void> updatePlugins() async {
-    await _apiClient.post('/search/updatePlugins');
+    await _apiClient.post<void>('/search/updatePlugins');
   }
 }

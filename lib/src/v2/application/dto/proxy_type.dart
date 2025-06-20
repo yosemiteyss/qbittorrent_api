@@ -1,3 +1,6 @@
+/// {@template proxy_type}
+/// Proxy type.
+/// {@endtemplate}
 enum ProxyType {
   /// Proxy is disabled.
   none,
@@ -18,6 +21,7 @@ enum ProxyType {
   socks4;
 }
 
+/// Converts proxy type from JSON.
 ProxyType? proxyTypeFromJson(dynamic type) {
   if (type is int) {
     switch (type) {
@@ -48,6 +52,7 @@ ProxyType? proxyTypeFromJson(dynamic type) {
   return null;
 }
 
+/// Converts proxy type to JSON.
 int? proxyTypeToJson(ProxyType? type) {
   switch (type) {
     case ProxyType.none:

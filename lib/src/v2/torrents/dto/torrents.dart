@@ -1,11 +1,16 @@
 import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
+/// {@template torrents}
+/// Torrents selector.
+/// {@endtemplate}
 class Torrents {
+  /// {@macro torrents}
   /// Select multiple torrents.
   const Torrents({required List<String> hashes})
       : _hashes = hashes,
         _selectAll = false;
 
+  /// {@macro torrents}
   /// Select all torrents.
   const Torrents.all()
       : _selectAll = true,
@@ -15,6 +20,7 @@ class Torrents {
 
   final bool _selectAll;
 
+  /// Convert to request string.
   String toRequestString() {
     if (_selectAll) {
       return 'all';

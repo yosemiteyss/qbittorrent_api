@@ -15,7 +15,7 @@ void main() {
     searchController = SearchController(fakeApiClient);
   });
 
-  group('test SearchController', () {
+  group('SearchController', () {
     test('startSearch returns a search job', () async {
       fakeApiClient.setResponse('''
       {

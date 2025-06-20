@@ -15,8 +15,10 @@ import 'package:qbittorrent_api/src/v2/transfer/transfer_controller.dart';
 class QBittorrentApiV2 {
   /// {@macro qbittorrent_api_v2}
   /// [baseUrl] - The base url of the qBittorrent server.
-  /// [cookiesStrategy] - Strategy for managing cookies. Default is [InMemoryCookiesStrategy].
-  /// [cookiePath] - (Deprecated) the path to the cookie file. Set null for Flutter Web application.
+  /// [cookiesStrategy] - Strategy for managing cookies. Default is
+  /// [InMemoryCookiesStrategy].
+  /// [cookiePath] - (Deprecated) the path to the cookie file. Set null for
+  /// Flutter Web application.
   /// [connectTimeout] - Timeout for [ApiClient] to connect to the server.
   /// [receiveTimeout] - Timeout for [ApiClient] to receive data.
   /// [sendTimeout] - Timeout for [ApiClient] to send data.
@@ -60,11 +62,24 @@ class QBittorrentApiV2 {
 
   late final ApiClient _apiClient;
 
+  /// Controller for authentication endpoints
   late final AuthController auth;
+
+  /// Controller for application endpoints
   late final ApplicationController application;
+
+  /// Controller for log endpoints
   late final LogController log;
+
+  /// Controller for sync endpoints
   late final SyncController sync;
+
+  /// Controller for search endpoints
   late final SearchController search;
+
+  /// Controller for transfer endpoints
   late final TransferController transfer;
+
+  /// Controller for torrents endpoints
   late final TorrentsController torrents;
 }

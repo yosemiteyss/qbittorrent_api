@@ -2,10 +2,15 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'category.g.dart';
 
+/// {@template category}
+/// Category.
+/// {@endtemplate}
 @JsonSerializable()
 class Category {
+  /// {@macro category}
   const Category({this.name, this.savePath});
 
+  /// Create an instance from a JSON map.
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
 
@@ -17,5 +22,6 @@ class Category {
   @JsonKey(name: 'savePath')
   final String? savePath;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
 }

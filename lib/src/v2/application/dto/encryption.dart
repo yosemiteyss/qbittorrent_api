@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template encryption}
+/// Encryption.
+/// {@endtemplate}
 enum Encryption {
   /// Prefer encryption
   @JsonValue(0)

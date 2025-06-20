@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template scheduler_days}
+/// Scheduler days.
+/// {@endtemplate}
 enum SchedulerDays {
   /// Every day
   @JsonValue(0)

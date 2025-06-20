@@ -5,8 +5,12 @@ import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
 part 'torrent_list_options.g.dart';
 
+/// {@template torrent_list_options}
+/// Torrent list options.
+/// {@endtemplate}
 @JsonSerializable()
 class TorrentListOptions {
+  /// {@macro torrent_list_options}
   const TorrentListOptions({
     this.filter,
     this.category,
@@ -18,6 +22,7 @@ class TorrentListOptions {
     this.hashes,
   });
 
+  /// Create a new instance from a JSON map.
   factory TorrentListOptions.fromJson(Map<String, dynamic> json) =>
       _$TorrentListOptionsFromJson(json);
 
@@ -29,7 +34,8 @@ class TorrentListOptions {
   @JsonKey(name: 'category')
   final String? category;
 
-  /// Get torrents with the given tag (empty string means "without tag"; no "tag" parameter means "any tag.
+  /// Get torrents with the given tag (empty string means "without tag"; no
+  /// "tag" parameter means "any tag.)
   @JsonKey(name: 'tag')
   final String? tag;
 
@@ -54,5 +60,6 @@ class TorrentListOptions {
   @ListItemConverter.bar()
   final List<String>? hashes;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$TorrentListOptionsToJson(this);
 }

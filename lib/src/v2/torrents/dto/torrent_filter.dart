@@ -1,3 +1,6 @@
+/// {@template torrent_filter}
+/// Torrent filter.
+/// {@endtemplate}
 enum TorrentFilter {
   all('all'),
   downloading('downloading'),
@@ -14,7 +17,9 @@ enum TorrentFilter {
   moving('moving'),
   errored('errored');
 
+  /// {@macro torrent_filter}
   const TorrentFilter(this.value);
 
+  /// The value of the torrent filter.
   final String value;
 }

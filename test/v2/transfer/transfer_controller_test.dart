@@ -14,7 +14,7 @@ void main() {
     transferController = TransferController(fakeApiClient);
   });
 
-  group('test TransferController', () {
+  group('TransferController', () {
     test('getGlobalTransferInfo returns transfer info', () async {
       fakeApiClient.setResponse('''
       {
@@ -80,7 +80,7 @@ void main() {
 
     test('banPeers returns nothing', () async {
       fakeApiClient.setResponse('');
-      const List<Peer> peers = [
+      const peers = <Peer>[
         Peer(host: '1.1.1.1', port: 1234),
         Peer(host: '2.3.4.5', port: 2345),
       ];
@@ -89,7 +89,7 @@ void main() {
 
     test('banPeers peers are separated by |', () async {
       fakeApiClient.setResponse('');
-      const List<Peer> peers = [
+      const peers = <Peer>[
         Peer(host: '1.1.1.1', port: 1234),
         Peer(host: '2.3.4.5', port: 2345),
       ];

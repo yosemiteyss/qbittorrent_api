@@ -2,8 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'search_result_file.g.dart';
 
+/// {@template search_result_file}
+/// Search result file.
+/// {@endtemplate}
 @JsonSerializable()
 class SearchResultFile {
+  /// {@macro search_result_file}
   const SearchResultFile({
     this.descrLink,
     this.fileName,
@@ -14,6 +18,7 @@ class SearchResultFile {
     this.siteUrl,
   });
 
+  /// Create a new instance from a JSON map.
   factory SearchResultFile.fromJson(Map<String, dynamic> json) =>
       _$SearchResultFileFromJson(json);
 
@@ -45,5 +50,6 @@ class SearchResultFile {
   @JsonKey(name: 'siteUrl')
   final String? siteUrl;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$SearchResultFileToJson(this);
 }

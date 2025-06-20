@@ -4,8 +4,12 @@ import 'package:qbittorrent_api/src/v2/utils/empty_string_converter.dart';
 
 part 'tracker.g.dart';
 
+/// {@template tracker}
+/// Tracker.
+/// {@endtemplate}
 @JsonSerializable()
 class Tracker {
+  /// {@macro tracker}
   const Tracker({
     this.url,
     this.status,
@@ -17,6 +21,7 @@ class Tracker {
     this.msg,
   });
 
+  /// Create a new instance from a JSON map.
   factory Tracker.fromJson(Map<String, dynamic> json) =>
       _$TrackerFromJson(json);
 
@@ -48,13 +53,16 @@ class Tracker {
   @JsonKey(name: 'num_leeches')
   final int? numLeeches;
 
-  /// Number of completed downloads for current torrent, as reported by the tracker
+  /// Number of completed downloads for current torrent, as reported by the
+  /// tracker
   @JsonKey(name: 'num_downloaded')
   final int? numDownloaded;
 
-  /// Tracker message (there is no way of knowing what this message is - it's up to tracker admins)
+  /// Tracker message (there is no way of knowing what this message is - it's
+  /// up to tracker admins)
   @JsonKey(name: 'msg')
   final String? msg;
 
+  /// Convert this instance to a JSON map.
   Map<String, dynamic> toJson() => _$TrackerToJson(this);
 }

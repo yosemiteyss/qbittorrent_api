@@ -2,73 +2,40 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
-/// Log Level
-enum Level {
+/// {@template logging_level}
+/// Defines the level of logging for HTTP requests and responses.
+/// {@endtemplate}
+enum LoggingLevel {
   /// No logs.
   none,
 
   /// Logs request and response lines.
-  ///
-  /// Example:
-  ///  ```
-  ///  --> POST /greeting
-  ///
-  ///  <-- 200 OK
-  ///  ```
   basic,
 
   /// Logs request and response lines and their respective headers.
-  ///
-  ///  Example:
-  /// ```
-  /// --> POST /greeting
-  /// Host: example.com
-  /// Content-Type: plain/text
-  /// Content-Length: 3
-  /// --> END POST
-  ///
-  /// <-- 200 OK
-  /// Content-Type: plain/text
-  /// Content-Length: 6
-  /// <-- END HTTP
-  /// ```
   headers,
 
-  /// Logs request and response lines and their respective headers and bodies (if present).
-  ///
-  /// Example:
-  /// ```
-  /// --> POST /greeting
-  /// Host: example.com
-  /// Content-Type: plain/text
-  /// Content-Length: 3
-  ///
-  /// Hi?
-  /// --> END POST
-  ///
-  /// <-- 200 OK
-  /// Content-Type: plain/text
-  /// Content-Length: 6
-  ///
-  /// Hello!
-  /// <-- END HTTP
-  /// ```
+  /// Logs request and response lines and their respective headers and bodies.
   body,
 }
 
-/// DioLoggingInterceptor
-/// Simple logging interceptor for dio.
-///
-/// Inspired the okhttp-logging-interceptor and referred to pretty_dio_logger.
+/// {@template http_logging_interceptor}
+/// A dio interceptor that logs HTTP requests and responses.
+/// {@endtemplate}
 class DioLoggingInterceptor extends Interceptor {
+  /// {@macro http_logging_interceptor}
   DioLoggingInterceptor({
-    this.level = Level.none,
+    required this.tag,
+    this.level = LoggingLevel.none,
     this.compact = true,
     this.logPrint = print,
   });
 
+  /// Starting tag for each log line.
+  final String tag;
+
   /// Log Level
-  final Level level;
+  final LoggingLevel level;
 
   /// Log printer; defaults logPrint log to console.
   /// In flutter, you'd better use debugPrint.
@@ -78,30 +45,33 @@ class DioLoggingInterceptor extends Interceptor {
   /// Print compact json response
   final bool compact;
 
-  final JsonDecoder decoder = const JsonDecoder();
-  final JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+  final JsonEncoder _jsonEncoder = const JsonEncoder.withIndent('  ');
 
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
-    if (level == Level.none) {
+    if (level == LoggingLevel.none) {
       return handler.next(options);
     }
 
-    logPrint('[DIO]--> ${options.method} ${options.uri}');
+    logPrint('[$tag] --> ${options.method} ${options.uri}');
 
-    if (level == Level.basic) {
+    if (level == LoggingLevel.basic) {
       return handler.next(options);
+    }
+
+    if (options.headers.isNotEmpty) {
+      logPrint('[$tag] Headers:');
     }
 
     options.headers.forEach((key, value) {
-      logPrint('[DIO][HEADER] $key:$value');
+      logPrint('[$tag] $key:$value');
     });
 
-    if (level == Level.headers) {
-      logPrint('[DIO]--> END ${options.method}');
+    if (level == LoggingLevel.headers) {
+      logPrint('[$tag] --> END ${options.method}');
       return handler.next(options);
     }
 
@@ -109,18 +79,22 @@ class DioLoggingInterceptor extends Interceptor {
     if (data != null) {
       if (data is Map) {
         if (compact) {
-          logPrint('[DIO][DATA] $data');
+          logPrint('[$tag] Data:');
+          logPrint('[$tag] $data');
         } else {
           _prettyPrintJson(data);
         }
       } else if (data is FormData) {
         // NOT IMPLEMENT
+        logPrint('[$tag] Form Data:');
+        logPrint('[$tag] ----------------------------');
       } else {
-        logPrint('[DIO][DATA] ${data.toString()}');
+        logPrint('[$tag] Data:');
+        logPrint('[$tag] $data');
       }
     }
 
-    logPrint('[DIO]--> END ${options.method}');
+    logPrint('[$tag] --> END ${options.method}');
 
     return handler.next(options);
   }
@@ -130,42 +104,47 @@ class DioLoggingInterceptor extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
-    if (level == Level.none) {
+    if (level == LoggingLevel.none) {
       return handler.next(response);
     }
 
     logPrint(
-        '[DIO]<-- ${response.statusCode} ${(response.statusMessage?.isNotEmpty ?? false) ? response.statusMessage : ''}');
+        '[$tag] <-- ${response.statusCode} ${(response.statusMessage?.isNotEmpty ?? false) ? response.statusMessage : ''}');
 
-    if (level == Level.basic) {
+    if (level == LoggingLevel.basic) {
       return handler.next(response);
     }
 
+    if (!response.headers.isEmpty) {
+      logPrint('[$tag] Headers:');
+    }
+
     response.headers.forEach((key, value) {
-      logPrint('[DIO][HEADER] $key:$value');
+      logPrint('[$tag] $key:$value');
     });
 
-    if (level == Level.headers) {
-      logPrint('[DIO]--> END HTTP');
+    if (level == LoggingLevel.headers) {
+      logPrint('[$tag] --> END HTTP');
       return handler.next(response);
     }
 
     final data = response.data;
     if (data != null) {
+      logPrint('[$tag] Data:');
       if (data is Map) {
         if (compact) {
-          logPrint('[DIO][DATA] $data');
+          logPrint('[$tag] $data');
         } else {
           _prettyPrintJson(data);
         }
       } else if (data is List) {
         // NOT IMPLEMENT
       } else {
-        logPrint('[DIO][DATA] ${data.toString()}');
+        logPrint('[$tag] $data');
       }
     }
 
-    logPrint('[DIO]<-- END HTTP');
+    logPrint('[$tag] <-- END HTTP');
     return handler.next(response);
   }
 
@@ -174,19 +153,17 @@ class DioLoggingInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) {
-    if (level == Level.none) {
+    if (level == LoggingLevel.none) {
       return handler.next(err);
     }
 
-    logPrint('[DIO]<-- HTTP FAILED: $err');
+    logPrint('[$tag] <-- HTTP FAILED: $err');
 
     return handler.next(err);
   }
 
   void _prettyPrintJson(Object input) {
-    final prettyString = encoder.convert(input);
-    prettyString
-        .split('\n')
-        .forEach((element) => logPrint('[DIO][DATA] $element'));
+    final prettyString = _jsonEncoder.convert(input);
+    prettyString.split('\n').forEach((element) => logPrint('[$tag] $element'));
   }
 }

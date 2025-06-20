@@ -2,8 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'build_info.g.dart';
 
+/// {@template build_info}
+/// Build info.
+/// {@endtemplate}
 @JsonSerializable()
 class BuildInfo {
+  /// {@macro build_info}
   const BuildInfo({
     this.qt,
     this.libtorrent,
@@ -13,6 +17,7 @@ class BuildInfo {
     this.zlib,
   });
 
+  /// Create a new instance from JSON.
   factory BuildInfo.fromJson(Map<String, dynamic> json) =>
       _$BuildInfoFromJson(json);
 
@@ -40,5 +45,6 @@ class BuildInfo {
   @JsonKey(name: 'zlib')
   final String? zlib;
 
+  /// Convert the instance to JSON.
   Map<String, dynamic> toJson() => _$BuildInfoToJson(this);
 }

@@ -2,8 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'torrent_contents.g.dart';
 
+/// {@template torrent_contents}
+/// Torrent contents.
+/// {@endtemplate}
 @JsonSerializable()
 class TorrentContents {
+  /// {@macro torrent_contents}
   const TorrentContents({
     this.index,
     this.name,
@@ -15,6 +19,7 @@ class TorrentContents {
     this.availability,
   });
 
+  /// Create a new instance from a JSON map.
   factory TorrentContents.fromJson(Map<String, dynamic> json) =>
       _$TorrentContentsFromJson(json);
 
@@ -51,5 +56,6 @@ class TorrentContents {
   @JsonKey(name: 'availability')
   final double? availability;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$TorrentContentsToJson(this);
 }

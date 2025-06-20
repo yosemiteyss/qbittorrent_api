@@ -230,7 +230,7 @@ void main() {
     });
   }
 
-  group('test SyncController', () {
+  group('SyncController', () {
     test('getMainData returns main data', () async {
       fakeApiClient.setResponse(buildMainDataResponse(), isJson: true);
       final mainData = await syncController.getMainData();

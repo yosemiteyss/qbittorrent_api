@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template log_type}
+/// Log type.
+/// {@endtemplate}
 enum LogType {
   /// Log::NORMAL
   @JsonValue(1)

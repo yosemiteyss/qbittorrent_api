@@ -5,8 +5,12 @@ import 'package:qbittorrent_api/src/v2/torrents/dto/torrent_info.dart';
 
 part 'main_data.g.dart';
 
+/// {@template main_data}
+/// Main data.
+/// {@endtemplate}
 @JsonSerializable()
 class MainData {
+  /// {@macro main_data}
   const MainData({
     this.rid,
     this.fullUpdate,
@@ -21,6 +25,7 @@ class MainData {
     this.trackersRemoved,
   });
 
+  /// Create a new instance from a JSON map.
   factory MainData.fromJson(Map<String, dynamic> json) =>
       _$MainDataFromJson(json);
 
@@ -66,5 +71,6 @@ class MainData {
   @JsonKey(name: 'trackers_removed')
   final List<String>? trackersRemoved;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$MainDataToJson(this);
 }

@@ -3,8 +3,12 @@ import 'package:qbittorrent_api/src/v2/sync/dto/peers_info.dart';
 
 part 'peers_data.g.dart';
 
+/// {@template peers_data}
+/// Peers data.
+/// {@endtemplate}
 @JsonSerializable()
 class PeersData {
+  /// {@macro peers_data}
   const PeersData({
     this.fullUpdate,
     this.peers,
@@ -13,6 +17,7 @@ class PeersData {
     this.showFlags,
   });
 
+  /// Create a new instance from a JSON map.
   factory PeersData.fromJson(Map<String, dynamic> json) =>
       _$PeersDataFromJson(json);
 
@@ -31,5 +36,6 @@ class PeersData {
   @JsonKey(name: 'show_flags')
   final bool? showFlags;
 
+  /// Convert the instance to a JSON map.
   Map<String, dynamic> toJson() => _$PeersDataToJson(this);
 }

@@ -1,5 +1,8 @@
+/// {@template qbittorrent_exception}
 /// Exception thrown by the qBittorrent API.
+/// {@endtemplate}
 class QBittorrentException implements Exception {
+  /// {@macro qbittorrent_exception}
   const QBittorrentException({
     this.statusCode,
     this.statusMessage,

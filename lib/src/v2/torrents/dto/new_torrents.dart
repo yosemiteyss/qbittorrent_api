@@ -3,8 +3,11 @@ import 'dart:typed_data';
 
 import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
-/// Represents a torrent file by bytes.
+/// {@template file_bytes}
+/// File bytes.
+/// {@endtemplate}
 class FileBytes {
+  /// {@macro file_bytes}
   const FileBytes({
     required this.filename,
     required this.bytes,
@@ -17,7 +20,11 @@ class FileBytes {
   final Uint8List bytes;
 }
 
+/// {@template new_torrents}
+/// New torrents.
+/// {@endtemplate}
 class NewTorrents {
+  /// {@macro new_torrents}
   /// Add new torrents by files.
   const NewTorrents.files({
     required List<File> this.files,
@@ -39,6 +46,7 @@ class NewTorrents {
   })  : urls = null,
         bytes = null;
 
+  /// {@macro new_torrents}
   /// Add new torrents by file bytes.
   const NewTorrents.bytes({
     required List<FileBytes> this.bytes,
@@ -60,6 +68,7 @@ class NewTorrents {
   })  : files = null,
         urls = null;
 
+  /// {@macro new_torrents}
   /// Add new torrents by urls.
   const NewTorrents.urls({
     required List<String> this.urls,
@@ -106,7 +115,8 @@ class NewTorrents {
   /// Skip hash checking. Possible values are true, false (default)
   final bool? skipChecking;
 
-  /// Add torrents in the paused state. Possible values are true, false (default)
+  /// Add torrents in the paused state. Possible values are true,
+  /// false (default)
   final bool? paused;
 
   /// Create the root folder. Possible values are true, false (default)
@@ -133,9 +143,11 @@ class NewTorrents {
   /// Enable sequential download. Possible values are true, false (default)
   final bool? sequentialDownload;
 
-  /// Prioritize download first last piece. Possible values are true, false (default)
+  /// Prioritize download first last piece. Possible values are true,
+  /// false (default)
   final bool? firstLastPiecePrio;
 
+  /// Convert to form data map.
   Map<String, dynamic> toFormData() {
     return {
       if (urls != null) 'urls': const ListItemConverter.newline().toJson(urls!),

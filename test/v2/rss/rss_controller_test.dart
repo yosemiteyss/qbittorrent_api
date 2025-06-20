@@ -12,7 +12,7 @@ void main() {
     rssController = RSSController(fakeApiClient);
   });
 
-  group('test RSSController', () {
+  group('RSSController', () {
     test('addFolder set params correctly', () async {
       fakeApiClient.setResponse('');
       await rssController.addFolder(path: 'path');

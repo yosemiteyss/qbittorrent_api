@@ -13,8 +13,12 @@ import 'package:qbittorrent_api/src/v2/utils/list_item_converter.dart';
 
 part 'preferences.g.dart';
 
+/// {@template preferences}
+/// Preferences.
+/// {@endtemplate}
 @JsonSerializable()
 class Preferences {
+  /// {@macro preferences}
   const Preferences({
     this.locale,
     this.createSubfolderEnabled,
@@ -164,6 +168,7 @@ class Preferences {
     this.utpTcpMixedMode,
   });
 
+  /// Creates a new instance from a JSON map.
   factory Preferences.fromJson(Map<String, dynamic> json) =>
       _$PreferencesFromJson(json);
 
@@ -764,11 +769,16 @@ class Preferences {
   @JsonKey(name: 'utp_tcp_mixed_mode')
   final UtpTcpMixedMode? utpTcpMixedMode;
 
+  /// Convert the instance to JSON.
   Map<String, dynamic> toJson() => _$PreferencesToJson(this);
 }
 
+/// {@template scan_dirs_converter}
+/// Convert for scan directories.
+/// {@endtemplate}
 class ScanDirsConverter
     implements JsonConverter<Map<String, ScanDirType>, Map<String, dynamic>> {
+  /// {@macro scan_dirs_converter}
   const ScanDirsConverter();
 
   @override

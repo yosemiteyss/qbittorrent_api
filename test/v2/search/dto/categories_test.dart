@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 void main() {
   group('test Categories', () {
     test(
-        'Categories.multiple toRequestString returns categories concatenated by |',
-        () {
+        'Categories.multiple toRequestString '
+        'returns categories concatenated by |', () {
       const selector = Categories(categories: ['cat1', 'cat2']);
       expect(selector.toRequestString(), 'cat1|cat2');
     });

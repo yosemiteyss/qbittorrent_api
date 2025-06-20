@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// {@template tracker_status}
+/// Tracker status.
+/// {@endtemplate}
 enum TrackerStatus {
   /// Tracker is disabled (used for DHT, PeX, and LSD)
   @JsonValue(0)
@@ -17,7 +20,8 @@ enum TrackerStatus {
   @JsonValue(3)
   updating,
 
-  /// Tracker has been contacted, but it is not working (or doesn't send proper replies)
+  /// Tracker has been contacted, but it is not working
+  /// (or doesn't send proper replies)
   @JsonValue(4)
   notWorking,
 
