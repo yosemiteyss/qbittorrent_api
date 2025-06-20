@@ -1,3 +1,6 @@
+## 1.3.0
+- Deprecated `cookiePath` and added `CookiesStrategy`.
+
 ## 1.2.3
 - Added stoppedUP state
 
