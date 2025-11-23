@@ -8,8 +8,8 @@ part of 'add_peers_result.dart';
 
 AddPeersResult _$AddPeersResultFromJson(Map<String, dynamic> json) =>
     AddPeersResult(
-      added: json['added'] as int?,
-      failed: json['failed'] as int?,
+      added: (json['added'] as num?)?.toInt(),
+      failed: (json['failed'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AddPeersResultToJson(AddPeersResult instance) {

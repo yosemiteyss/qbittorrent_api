@@ -7,9 +7,9 @@ part of 'log.dart';
 // **************************************************************************
 
 Log _$LogFromJson(Map<String, dynamic> json) => Log(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       message: json['message'] as String?,
-      timestamp: json['timestamp'] as int?,
+      timestamp: (json['timestamp'] as num?)?.toInt(),
       type: $enumDecodeNullable(_$LogTypeEnumMap, json['type']),
     );
 

@@ -7,18 +7,18 @@ part of 'transfer_info.dart';
 // **************************************************************************
 
 TransferInfo _$TransferInfoFromJson(Map<String, dynamic> json) => TransferInfo(
-      dlInfoSpeed: json['dl_info_speed'] as int?,
-      dlInfoData: json['dl_info_data'] as int?,
-      upInfoSpeed: json['up_info_speed'] as int?,
-      upInfoData: json['up_info_data'] as int?,
-      dlRateLimit: json['dl_rate_limit'] as int?,
-      upRateLimit: json['up_rate_limit'] as int?,
-      dhtNodes: json['dht_nodes'] as int?,
+      dlInfoSpeed: (json['dl_info_speed'] as num?)?.toInt(),
+      dlInfoData: (json['dl_info_data'] as num?)?.toInt(),
+      upInfoSpeed: (json['up_info_speed'] as num?)?.toInt(),
+      upInfoData: (json['up_info_data'] as num?)?.toInt(),
+      dlRateLimit: (json['dl_rate_limit'] as num?)?.toInt(),
+      upRateLimit: (json['up_rate_limit'] as num?)?.toInt(),
+      dhtNodes: (json['dht_nodes'] as num?)?.toInt(),
       connectionStatus: $enumDecodeNullable(
           _$ConnectionStatusEnumMap, json['connection_status']),
       queueing: json['queueing'] as bool?,
       useAltSpeedLimits: json['use_alt_speed_limits'] as bool?,
-      refreshInterval: json['refresh_interval'] as int?,
+      refreshInterval: (json['refresh_interval'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$TransferInfoToJson(TransferInfo instance) {

@@ -14,7 +14,7 @@ PeersData _$PeersDataFromJson(Map<String, dynamic> json) => PeersData(
       peersRemoved: (json['peers_removed'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      rid: json['rid'] as int?,
+      rid: (json['rid'] as num?)?.toInt(),
       showFlags: json['show_flags'] as bool?,
     );
 

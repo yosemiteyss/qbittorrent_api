@@ -7,9 +7,9 @@ part of 'search_status.dart';
 // **************************************************************************
 
 SearchStatus _$SearchStatusFromJson(Map<String, dynamic> json) => SearchStatus(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       status: $enumDecodeNullable(_$SearchJobStatusEnumMap, json['status']),
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SearchStatusToJson(SearchStatus instance) {

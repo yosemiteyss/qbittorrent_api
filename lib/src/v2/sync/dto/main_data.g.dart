@@ -7,7 +7,7 @@ part of 'main_data.dart';
 // **************************************************************************
 
 MainData _$MainDataFromJson(Map<String, dynamic> json) => MainData(
-      rid: json['rid'] as int?,
+      rid: (json['rid'] as num?)?.toInt(),
       fullUpdate: json['full_update'] as bool?,
       torrents: (json['torrents'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, TorrentInfo.fromJson(e as Map<String, dynamic>)),

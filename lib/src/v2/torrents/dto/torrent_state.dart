@@ -17,6 +17,7 @@ enum TorrentState {
   uploading,
 
   /// Torrent is paused and has finished downloading
+  /// [pausedUP] was renamed to stoppedUP in Web API v2.11.0
   @JsonValue('pausedUP')
   pausedUP,
 
@@ -47,10 +48,13 @@ enum TorrentState {
   /// Torrent has just started downloading and is fetching metadata
   @JsonValue('metaDL')
   metaDL,
+
+  /// Torrent is forced fetching metadata.
   @JsonValue('forcedMetaDL')
   forcedMetaDL,
 
   /// Torrent is paused and has NOT finished downloading
+  /// [pausedDL] was renamed to stoppedDL in Web API v2.11.0
   @JsonValue('pausedDL')
   pausedDL,
 
@@ -70,9 +74,13 @@ enum TorrentState {
   @JsonValue('forcedDL')
   forcedDL,
 
-  /// Torrent is stopped and not uploading
+  /// Torrent is paused and has finished downloading
   @JsonValue('stoppedUP')
   stoppedUP,
+
+  /// Torrent is paused and has NOT finished downloading
+  @JsonValue('stoppedDL')
+  stoppedDL,
 
   /// Checking resume data on qBt startup
   @JsonValue('checkingResumeData')
