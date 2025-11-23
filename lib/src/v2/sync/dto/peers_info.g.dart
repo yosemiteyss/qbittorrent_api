@@ -11,18 +11,18 @@ PeersInfo _$PeersInfoFromJson(Map<String, dynamic> json) => PeersInfo(
       connection: json['connection'] as String?,
       country: json['country'] as String?,
       countryCode: json['country_code'] as String?,
-      dlSpeed: json['dl_speed'] as int?,
-      downloaded: json['downloaded'] as int?,
+      dlSpeed: (json['dl_speed'] as num?)?.toInt(),
+      downloaded: (json['downloaded'] as num?)?.toInt(),
       files: json['files'] as String?,
       flags: json['flags'] as String?,
       flagsDesc: json['flags_desc'] as String?,
       ip: json['ip'] as String?,
       peerIdClient: json['peer_id_client'] as String?,
-      port: json['port'] as int?,
+      port: (json['port'] as num?)?.toInt(),
       progress: (json['progress'] as num?)?.toDouble(),
       relevance: (json['relevance'] as num?)?.toDouble(),
-      upSpeed: json['up_speed'] as int?,
-      uploaded: json['uploaded'] as int?,
+      upSpeed: (json['up_speed'] as num?)?.toInt(),
+      uploaded: (json['uploaded'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PeersInfoToJson(PeersInfo instance) {

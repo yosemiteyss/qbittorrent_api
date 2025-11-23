@@ -7,7 +7,7 @@ part of 'search_job.dart';
 // **************************************************************************
 
 SearchJob _$SearchJobFromJson(Map<String, dynamic> json) => SearchJob(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SearchJobToJson(SearchJob instance) {

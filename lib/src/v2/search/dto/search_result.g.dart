@@ -11,7 +11,7 @@ SearchResult _$SearchResultFromJson(Map<String, dynamic> json) => SearchResult(
           ?.map((e) => SearchResultFile.fromJson(e as Map<String, dynamic>))
           .toList(),
       status: $enumDecodeNullable(_$SearchJobStatusEnumMap, json['status']),
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SearchResultToJson(SearchResult instance) {

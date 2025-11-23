@@ -13,8 +13,8 @@ TorrentListOptions _$TorrentListOptionsFromJson(Map<String, dynamic> json) =>
       tag: json['tag'] as String?,
       sort: $enumDecodeNullable(_$TorrentSortEnumMap, json['sort']),
       reverse: json['reverse'] as bool?,
-      limit: json['limit'] as int?,
-      offset: json['offset'] as int?,
+      limit: (json['limit'] as num?)?.toInt(),
+      offset: (json['offset'] as num?)?.toInt(),
       hashes: _$JsonConverterFromJson<String, List<String>>(
           json['hashes'], const ListItemConverter.bar().fromJson),
     );

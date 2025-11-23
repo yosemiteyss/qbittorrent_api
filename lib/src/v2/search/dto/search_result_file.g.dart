@@ -10,10 +10,10 @@ SearchResultFile _$SearchResultFileFromJson(Map<String, dynamic> json) =>
     SearchResultFile(
       descrLink: json['descrLink'] as String?,
       fileName: json['fileName'] as String?,
-      fileSize: json['fileSize'] as int?,
+      fileSize: (json['fileSize'] as num?)?.toInt(),
       fileUrl: json['fileUrl'] as String?,
-      nbLeechers: json['nbLeechers'] as int?,
-      nbSeeders: json['nbSeeders'] as int?,
+      nbLeechers: (json['nbLeechers'] as num?)?.toInt(),
+      nbSeeders: (json['nbSeeders'] as num?)?.toInt(),
       siteUrl: json['siteUrl'] as String?,
     );
 

@@ -8,14 +8,14 @@ part of 'torrent_contents.dart';
 
 TorrentContents _$TorrentContentsFromJson(Map<String, dynamic> json) =>
     TorrentContents(
-      index: json['index'] as int?,
+      index: (json['index'] as num?)?.toInt(),
       name: json['name'] as String?,
-      size: json['size'] as int?,
+      size: (json['size'] as num?)?.toInt(),
       progress: (json['progress'] as num?)?.toDouble(),
-      priority: json['priority'] as int?,
+      priority: (json['priority'] as num?)?.toInt(),
       isSeed: json['is_seed'] as bool?,
       pieceRange: (json['piece_range'] as List<dynamic>?)
-          ?.map((e) => e as int)
+          ?.map((e) => (e as num).toInt())
           .toList(),
       availability: (json['availability'] as num?)?.toDouble(),
     );

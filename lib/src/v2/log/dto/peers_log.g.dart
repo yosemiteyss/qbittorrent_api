@@ -7,9 +7,9 @@ part of 'peers_log.dart';
 // **************************************************************************
 
 PeersLog _$PeersLogFromJson(Map<String, dynamic> json) => PeersLog(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       ip: json['ip'] as String?,
-      timestamp: json['timestamp'] as int?,
+      timestamp: (json['timestamp'] as num?)?.toInt(),
       blocked: json['blocked'] as bool?,
       reason: json['reason'] as String?,
     );

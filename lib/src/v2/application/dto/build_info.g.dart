@@ -11,7 +11,7 @@ BuildInfo _$BuildInfoFromJson(Map<String, dynamic> json) => BuildInfo(
       libtorrent: json['libtorrent'] as String?,
       boost: json['boost'] as String?,
       openssl: json['openssl'] as String?,
-      bitness: json['bitness'] as int?,
+      bitness: (json['bitness'] as num?)?.toInt(),
       zlib: json['zlib'] as String?,
     );
 

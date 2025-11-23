@@ -10,10 +10,10 @@ Tracker _$TrackerFromJson(Map<String, dynamic> json) => Tracker(
       url: json['url'] as String?,
       status: $enumDecodeNullable(_$TrackerStatusEnumMap, json['status']),
       tier: const EmptyStringToInt().fromJson(json['tier']),
-      numPeers: json['num_peers'] as int?,
-      numSeeds: json['num_seeds'] as int?,
-      numLeeches: json['num_leeches'] as int?,
-      numDownloaded: json['num_downloaded'] as int?,
+      numPeers: (json['num_peers'] as num?)?.toInt(),
+      numSeeds: (json['num_seeds'] as num?)?.toInt(),
+      numLeeches: (json['num_leeches'] as num?)?.toInt(),
+      numDownloaded: (json['num_downloaded'] as num?)?.toInt(),
       msg: json['msg'] as String?,
     );
 
