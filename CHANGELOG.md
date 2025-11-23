@@ -1,3 +1,6 @@
+## 1.3.1
+- Added `TorrentState.stoppedDL`.
+
 ## 1.3.0
 - Deprecated `cookiePath` and added `CookiesStrategy`.
 
